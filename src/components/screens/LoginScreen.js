@@ -12,7 +12,7 @@ export default ({ navigation }) => {
   const handleLogin = () => {
     if (username != "" && password != "") {
       login({ username, password }, () => {
-        navigation.navigate("Home");
+        navigation.navigate("Main");
       });
     }
   }

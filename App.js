@@ -14,13 +14,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import RegisterScreen from './src/components/pages/RegisterScreen';
-import LoginScreen from './src/components/pages/LoginScreen';
-import FeedScreen from './src/components/pages/FeedScreen';
-import UploadScreen from './src/components/pages/UploadScreen';
-import UserScreen from './src/components/pages/UserScreen';
+import RegisterScreen from './src/components/screens/RegisterScreen';
+import LoginScreen from './src/components/screens/LoginScreen';
+import FeedScreen from './src/components/screens/FeedScreen';
+import UploadScreen from './src/components/screens/UploadScreen';
+import UserScreen from './src/components/screens/UserScreen';
+import ModalScreen from './src/components/screens/ModalScreen';
 
-const Stack = createStackNavigator();
+const AuthStack = createStackNavigator();
+const MainStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeTabScreen = () => (
@@ -68,30 +70,58 @@ const HomeTabScreen = () => (
   </Tab.Navigator>
 );
 
+// modularize stacks
+
+const MainStackScreen = () => (
+  <MainStack.Navigator mode="modal">
+    <MainStack.Screen 
+      name="Home" 
+      component={HomeTabScreen}
+      options={{ headerShown: false }} 
+    />
+    <AuthStack.Screen 
+      name="Modal" 
+      component={ModalScreen}
+      options={{ headerShown: false }} 
+    />
+  </MainStack.Navigator>
+);
+
 const App: () => React$Node = () => {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen 
+        <AuthStack.Navigator initialRouteName="Login">
+          <AuthStack.Screen 
             name="Register" 
             component={RegisterScreen}
             options={{ headerShown: false }}
           />
-          <Tab.Screen 
+          <AuthStack.Screen 
             name="Login" 
             component={LoginScreen} 
             options={{ headerShown: false }}
           />
-          <Stack.Screen 
-            name="Home" 
-            component={HomeTabScreen}
-            options={{ headerShown: false }} 
+          <AuthStack.Screen
+            name="Main"
+            component={MainStackScreen}
+            options={{ headerShown: false }}
           />
-        </Stack.Navigator>
+        </AuthStack.Navigator>
       </NavigationContainer>
     </>
   );
 };
+
+{/* <AuthStack.Screen 
+name="Home" 
+component={HomeTabScreen}
+options={{ headerShown: false }} 
+/>
+<AuthStack.Screen 
+name="Modal" 
+component={ModalScreen}
+options={{ headerShown: false }} 
+/> */}
 
 export default App;
