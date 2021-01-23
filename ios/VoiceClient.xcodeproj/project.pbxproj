@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* VoiceClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* VoiceClientTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -20,6 +19,7 @@
 		A82E9313C37E9BE177177ECA /* libPods-VoiceClient-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9853D8E0B2FDF6A969EF61E /* libPods-VoiceClient-tvOS.a */; };
 		D70E454DFCF02DBC2A49ACAD /* libPods-VoiceClient-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CFD3663A9261CBDD71921EFF /* libPods-VoiceClient-tvOSTests.a */; };
 		DCA42D0148532B7FDEF9EC9C /* libPods-VoiceClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AC978F476347B577614D0D6 /* libPods-VoiceClient.a */; };
+		75B49757A6AB44DEA904528E /* RNPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9093A645D174DA783C4DFE3 /* RNPlaceholder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +68,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F16833859C99366EFD7ABF8D /* libPods-VoiceClient-VoiceClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VoiceClient-VoiceClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9093A645D174DA783C4DFE3 /* RNPlaceholder.swift */ = {isa = PBXFileReference; name = "RNPlaceholder.swift"; path = "RNPlaceholder.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -642,6 +643,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* VoiceClientTests.m in Sources */,
+				75B49757A6AB44DEA904528E /* RNPlaceholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,6 +653,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				75B49757A6AB44DEA904528E /* RNPlaceholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,6 +663,7 @@
 			files = (
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
+				75B49757A6AB44DEA904528E /* RNPlaceholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -668,6 +672,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DCD954D1E0B4F2C00145EB5 /* VoiceClientTests.m in Sources */,
+				75B49757A6AB44DEA904528E /* RNPlaceholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,6 +712,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceClient.app/VoiceClient";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -727,6 +733,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceClient.app/VoiceClient";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -748,7 +755,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = VoiceClient;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -769,7 +776,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = VoiceClient;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -799,6 +806,7 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -827,6 +835,7 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -854,6 +863,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceClient-tvOS.app/VoiceClient-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -881,6 +891,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceClient-tvOS.app/VoiceClient-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -941,6 +952,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -994,6 +1006,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
