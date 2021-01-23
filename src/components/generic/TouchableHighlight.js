@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableHighlight, View, Text, StyleSheet } from 'react-native';
+import { TouchableHighlight, Text, StyleSheet } from 'react-native';
 
 export default ({ onPress, title, otherStyles }) => (
   <TouchableHighlight
