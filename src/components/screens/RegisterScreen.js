@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
 import TouchableHighlight from '../generic/TouchableHighlight';
 
-import { register } from '../../service/api/authentication';
+import { register } from '../../service/api/users';
 
 export default ({ navigation }) => { 
   const [email, setEmail] = useState("");

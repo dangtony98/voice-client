@@ -11,7 +11,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import RegisterScreen from './src/components/screens/RegisterScreen';
 import LoginScreen from './src/components/screens/LoginScreen';
@@ -29,7 +29,6 @@ const HomeTabScreen = () => (
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-
         switch (route.name) {
           case "Feed":
             iconName = focused ? 'planet' : 'planet-outline';
@@ -42,7 +41,7 @@ const HomeTabScreen = () => (
             break;
         } 
 
-        return <Ionicons name={iconName} size={size} color={color} />;
+        return <Icon name={iconName} size={size} color={color} />;
       }
     })}
     tabBarOptions={{
@@ -69,8 +68,6 @@ const HomeTabScreen = () => (
   </Tab.Navigator>
 );
 
-// modularize stacks
-
 const MainStackScreen = () => (
   <MainStack.Navigator mode="modal">
     <MainStack.Screen 
@@ -90,7 +87,7 @@ const App: () => React$Node = () => {
   return (
     <>
       <NavigationContainer>
-        <AuthStack.Navigator initialRouteName="Login">
+        <AuthStack.Navigator initialRouteName="Main">
           <AuthStack.Screen 
             name="Register" 
             component={RegisterScreen}
