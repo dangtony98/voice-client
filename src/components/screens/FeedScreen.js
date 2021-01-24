@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { FlatList, View, Text, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
 import TouchableOpacity from '../generic/TouchableOpacity';
 import TrackPlayer from 'react-native-track-player';
 
 import Audio from '../audio/Audio';
+import { get_feed } from '../../service/api/posts';
 
 const track = {
   id: '111',
@@ -20,10 +21,32 @@ TrackPlayer.add([track]).then(() => {
 export default ({ navigation }) => {
   const [search, setSearch] = useState(""); 
   const [selected, setSelected] = useState("trending");
+  const [posts, setPosts] = useState([])
+  const [isFetching, setIsFetching] = useState(false);
+
+  // get feed is being triggered twice causing duplicates???
+  useEffect(() => {
+    get_feed((feed) => {
+      setPosts(prevState => [...prevState, ...feed])
+    });
+  }, []);
+
+  const renderItem = ({ item }) => {
+    console.log('Item: ', item);
+    return (
+      <Audio 
+        navigation={navigation}
+        user={item.user}
+        caption={item.caption}
+        votes={item.votes}
+        comments_count={item.comments_count}
+      />
+    );
+  }
 
   return (
     <View>
-      <View style={[styles.navBar, { marginBottom: 15 }]}>
+      <View style={styles.navBar}>
         <TextInput 
           value={search}
           placeholder='Try "Cornell"'
@@ -46,8 +69,10 @@ export default ({ navigation }) => {
           </View>
         </View>
       </View>
-      <Audio 
-        navigation={navigation}
+      <FlatList
+        data={posts}
+        renderItem={renderItem}
+        keyExtractor={item => item._id}
       />
   </View>
   );
@@ -57,7 +82,7 @@ const styles = StyleSheet.create({
   navBar: {
     paddingTop: 100,
     paddingHorizontal: 25,
-    backgroundColor: 'rgb(255, 255, 255)'
+    backgroundColor: 'rgb(255, 255, 255)',
   },
   navBox: {
     flexDirection: 'row'

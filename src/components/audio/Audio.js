@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import AudioToggle from './AudioToggle';
 
-export default ({ navigation }) => {
+export default ({ user, caption, votes, comments_count, navigation }) => {
   const [isPlaying, setIsPlaying] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -51,7 +51,7 @@ export default ({ navigation }) => {
           source={{ uri: 'https://external-preview.redd.it/_o7PutALILIg2poC9ed67vHQ68Cxx67UT6q7CFAhCs4.png?auto=webp&s=2560c01cc455c9dcbad0d869116c938060e43212' }}
           style={[styles.userImage, { marginRight: 15 }]} 
         />
-        <Text style={{ fontWeight: '500' }}>Maidul</Text>
+        <Text style={{ fontWeight: '500' }}>{user.username}</Text>
       </View>
       <View style={styles.audioImage}>
         <View style={{ alignItems: 'center' }}>
@@ -80,21 +80,24 @@ export default ({ navigation }) => {
             size={25} 
             color="rgb(127,140,141)" 
           />
-          <Text style={{ marginLeft: 5, fontWeight: '500' }}>20</Text>
+          <Text style={{ marginLeft: 5, fontWeight: '500' }}>{votes.voteCounts}</Text>
           <Icon 
             name="arrow-down" 
             size={25} 
             color="rgb(127,140,141)"
-            style={{ marginLeft: 15 }} 
+            style={{ marginLeft: 5 }} 
           />
-          <Text style={{ marginLeft: 5, fontWeight: '500' }}>15</Text>
         </View>
         <View style={styles.bottomGroup}>
-          <Icon name="chatbox" size={25} color="rgb(127,140,141)" />
-          <Text style={{ marginLeft: 5, fontWeight: '500' }}>32</Text>
+          <Icon 
+            name="chatbox" 
+            size={25} 
+            color="rgb(127,140,141)" 
+          />
+          <Text style={{ marginLeft: 5, fontWeight: '500' }}>{comments_count}</Text>
         </View>
       </View>
-      <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</Text>
+      <Text>{caption}</Text>
     </View>
   );
 }
