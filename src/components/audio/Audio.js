@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
-import TouchableOpacity from '../generic/TouchableOpacity';
 import Slider from '@react-native-community/slider';
 import TrackPlayer from 'react-native-track-player';
 import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';

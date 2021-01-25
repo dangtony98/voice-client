@@ -51,6 +51,11 @@ const HomeTabScreen = () => (
     }}
   >
     <Tab.Screen 
+      name="User" 
+      component={UserScreen} 
+      options={{ headerShown: true }}
+    />
+    <Tab.Screen 
       name="Feed" 
       component={FeedScreen} 
       options={{ headerShown: false }}
@@ -60,11 +65,7 @@ const HomeTabScreen = () => (
       component={UploadScreen} 
       options={{ headerShown: false }}
     />
-    <Tab.Screen 
-      name="User" 
-      component={UserScreen} 
-      options={{ headerShown: false }}
-    />
+    
   </Tab.Navigator>
 );
 
@@ -87,21 +88,24 @@ const App: () => React$Node = () => {
   return (
     <>
       <NavigationContainer>
-        <AuthStack.Navigator initialRouteName="Main">
+        <AuthStack.Navigator 
+          initialRouteName="Main"
+          screenOptions={{ headerShown: false }}
+        >
           <AuthStack.Screen 
             name="Register" 
             component={RegisterScreen}
-            options={{ headerShown: false }}
+            // options={{ headerShown: false }}
           />
           <AuthStack.Screen 
             name="Login" 
             component={LoginScreen} 
-            options={{ headerShown: false }}
+            // options={{ headerShown: false }}
           />
           <AuthStack.Screen
             name="Main"
             component={MainStackScreen}
-            options={{ headerShown: false }}
+            // options={{ headerShown: false }}
           />
         </AuthStack.Navigator>
       </NavigationContainer>

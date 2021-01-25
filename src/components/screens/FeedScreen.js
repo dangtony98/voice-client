@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
 import TouchableOpacity from '../generic/TouchableOpacity';
 import TrackPlayer from 'react-native-track-player';
@@ -27,12 +27,13 @@ export default ({ navigation }) => {
   // get feed is being triggered twice causing duplicates???
   useEffect(() => {
     get_feed((feed) => {
-      setPosts(prevState => [...prevState, ...feed])
+      console.log('Feed retrieved');
+      setPosts(prevState => [...prevState, ...feed]);
+      print(posts);
     });
   }, []);
 
   const renderItem = ({ item }) => {
-    console.log('Item: ', item);
     return (
       <Audio 
         navigation={navigation}
@@ -73,6 +74,10 @@ export default ({ navigation }) => {
         data={posts}
         renderItem={renderItem}
         keyExtractor={item => item._id}
+        onEndReached={() => console.log('End reached!')}
+        onEndReachedThreshold={0.25}
+        onRefresh={() => console.log('onRefresh triggered')}
+        refreshing={isFetching}
       />
   </View>
   );
