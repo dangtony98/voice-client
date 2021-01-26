@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
 import TrackPlayer from 'react-native-track-player';
 import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
-
 import AudioToggle from './AudioToggle';
 
-export default ({ user, caption, votes, comments_count, navigation }) => {
+export default ({ user, caption, votes, comments_count, audio_key, navigation }) => {
   const [isPlaying, setIsPlaying] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
   const { position, duration } = useTrackPlayerProgress(250);
 
   const handleVote = () => {
-    
+    // TO-DO: hook up API here
   }
 
   useEffect(() => {
@@ -43,8 +42,16 @@ export default ({ user, caption, votes, comments_count, navigation }) => {
     }
   }
 
+  const onCommentsPressed = () => {
+    navigation.navigate("Comments");
+  }
+
   return (
-    <View style={styles.audio}>
+    <View style={styles.audio} onLayout={(event) => {
+      // TO-DO: remove in product; currently kept for reference
+      var {x, y, width, height} = event.nativeEvent.layout;
+      console.log(height);
+    }}>
       <View style={[styles.top, { marginBottom: 15 }]}>
         <Image 
           source={{ uri: 'https://external-preview.redd.it/_o7PutALILIg2poC9ed67vHQ68Cxx67UT6q7CFAhCs4.png?auto=webp&s=2560c01cc455c9dcbad0d869116c938060e43212' }}
@@ -87,14 +94,18 @@ export default ({ user, caption, votes, comments_count, navigation }) => {
             style={{ marginLeft: 5 }} 
           />
         </View>
-        <View style={styles.bottomGroup}>
+        <TouchableOpacity 
+          activeOpacity={0.5}
+          onPress={onCommentsPressed}
+          style={styles.bottomGroup}
+        >
           <Icon 
             name="chatbox" 
             size={25} 
             color="rgb(127,140,141)" 
           />
           <Text style={{ marginLeft: 5, fontWeight: '500' }}>{comments_count}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <Text>{caption}</Text>
     </View>
@@ -115,7 +126,7 @@ const styles = StyleSheet.create({
   audioImage: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 250,
+    height: 400,
     padding: 25,
     alignSelf: 'stretch',
     borderRadius: 10,

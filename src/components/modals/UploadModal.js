@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 export default ({ navigation }) => (
   <View style={styles.screen}>
+
   </View>
 );
 

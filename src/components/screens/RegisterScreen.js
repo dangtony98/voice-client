@@ -19,9 +19,8 @@ export default ({ navigation }) => {
         }        
         break;
       case 2:
-        console.log('Call reigstration API');
         register({ email, password, username }, () => {
-          navigation.navigate("Home");
+          navigation.navigate("Main");
         });
         break;
     }
