@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   userImage: {
     height: 100,
     width: 100,
-    borderRadius: 50,
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: 'rgb(52, 152, 219)'
   },

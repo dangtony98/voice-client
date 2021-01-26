@@ -1,32 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, Text, StyleSheet } from 'react-native';
+// import Slider from '@react-native-community/slider';
 import TextInput from '../generic/TextInput';
 import TouchableOpacity from '../generic/TouchableOpacity';
 import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
+import AudioBar from '../audio/AudioBar';
 import { get_feed, get_audio } from '../../service/api/posts';
-import { PrivateValueStore } from '@react-navigation/native';
 
-const track = {
-  id: '111',
-  url: 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3',
-  title: 'test',
-  artist: 'test2'
-}
+// audio bar development
+// import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';
 
-TrackPlayer.add([track]).then(() => {    
-  // Added track
-});
+// const track = {
+//   id: '111',
+//   url: 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3',
+//   title: 'test',
+//   artist: 'test2'
+// }
 
-const createTrack = async (audioKey, username, caption) => {
-  // get_audio will be defunct
-  get_audio("1611469547979.mp3", (audioUrl) => {
-    return {
-      id: audioKey,
-      url: audioUrl,
-      title: caption,
-      artist: username
-    }
+// TrackPlayer.add([track]).then(() => {    
+//   // Added track
+// });
+
+// const createTrack2 = async (audioKey, username, caption) => {
+//   // get_audio will be defunct
+//   get_audio("1611469547979.mp3", (audioUrl) => {
+//     return {
+//       id: audioKey,
+//       url: audioUrl,
+//       title: caption,
+//       artist: username
+//     }
+//   });
+// }
+
+const addTracks = (feed) => {
+  const tracks = feed.map(post => ({
+    id: post._id,
+    url: post.audio_key,
+    title: post.caption,
+    artist: post.user.username
+  }));
+  TrackPlayer.add(tracks).then(() => {    
+    console.log('TrackPlayer added tracks: ');
+    console.log(tracks);
   });
 }
 
@@ -37,18 +54,12 @@ export default ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
 
-  // createTrack(1, 2, 3);
-
   useEffect(() => {
     get_feed(skip, feed => {
       setPosts(feed);
       setSkip(prevState => prevState + feed.length);
-      // TO-DO:
-      // construct tracks and load them into the track player here...
-      // also pass identifier information through to every post
-      console.log(feed);
+      addTracks(feed);
     });
-
   }, []);
 
   const renderItem = ({ item }) => {
@@ -59,7 +70,7 @@ export default ({ navigation }) => {
         caption={item.caption}
         votes={item.votes}
         comments_count={item.comments_count}
-        audio_key={item.audio_key}
+        id={item._id}
       />
     );
   }
@@ -69,23 +80,19 @@ export default ({ navigation }) => {
   }
 
   const handleMore = () => {
-    console.log('handleMore()');
     get_feed(skip, feed => {
       setPosts(prevState => [...prevState, ...feed]);
       setSkip(prevState => prevState + feed.length);
-      console.log('New feed: ');
-      console.log(feed);
+      addTracks(feed);
     });
   }
 
   const onRefresh = () => {
-    console.log('onRefresh() triggered');
     get_feed(skip, feed => {
       setPosts(feed)
       setSkip(prevState => prevState + feed.length);
-      // TO-DO:
-      // re-construct tracks and load them into the track player here...
-      // also pass identifier infromation through to every post
+      TrackPlayer.reset();
+      addTracks(feed);
     })
   }
 
@@ -124,10 +131,11 @@ export default ({ navigation }) => {
         refreshing={isFetching}
         snapToAlignment={"start"}
         decelerationRate={"fast"}
-        snapToInterval={564}
+        snapToInterval={519}
         pagingEnabled
         style={{ flexGrow: 1 }}
-      />      
+      />
+      <AudioBar />
   </View>
   );
 }

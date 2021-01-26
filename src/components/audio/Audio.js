@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Slider from '@react-native-community/slider';
 import TrackPlayer from 'react-native-track-player';
 import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AudioToggle from './AudioToggle';
 
-export default ({ user, caption, votes, comments_count, audio_key, navigation }) => {
+export default ({ user, caption, votes, comments_count, id, navigation }) => {
   const [isPlaying, setIsPlaying] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
   const { position, duration } = useTrackPlayerProgress(250);
-
-  const handleVote = () => {
-    // TO-DO: hook up API here
-  }
 
   useEffect(() => {
     if (!isSeeking && position && duration) {
@@ -32,13 +27,36 @@ export default ({ user, caption, votes, comments_count, audio_key, navigation })
     setIsSeeking(false);
   };
 
-  const togglePlay = () => {
-    if (isPlaying) {
-      TrackPlayer.pause();
-      setIsPlaying(false);
+  const togglePlay = async () => {
+    let trackId = await TrackPlayer.getCurrentTrack();
+
+    if (trackId == id) {
+      // case: post in view is post that is playing
+      if (isPlaying) {
+        TrackPlayer.pause();
+        setIsPlaying(false);
+      } else {
+        TrackPlayer.play();
+        setIsPlaying(true);
+      }
     } else {
-      TrackPlayer.play();
+      // case: post in view is not post that is playing
       setIsPlaying(true);
+      TrackPlayer.pause();
+      TrackPlayer.skip(id);
+      TrackPlayer.play();
+    }
+  }
+
+  const handleVote = (vote) => {
+    // TO-DO: hook up API here
+    switch (vote) {
+      case 'upvote':
+        // TO-DO
+        break;
+      case 'downvote':
+        // TO-DO
+        break;
     }
   }
 
@@ -65,18 +83,16 @@ export default ({ user, caption, votes, comments_count, audio_key, navigation })
             isPlaying={isPlaying}
             onPress={() => togglePlay()}
           />
-          <View style={{ marginTop: 15 }}>
-            <Slider
-              style={{height: 20, width: 300 }}
-              minimumValue={0}
-              maximumValue={1}
-              value={sliderValue}
-              onSlidingStart={slidingStarted}
-              onSlidingComplete={slidingCompleted}
-              minimumTrackTintColor="#FFFFFF"
-              maximumTrackTintColor="#000000"
-            />
-          </View>
+          {/* <Slider
+            style={{height: 20, width: 300, marginTop: 15 }}
+            minimumValue={0}
+            maximumValue={1}
+            value={sliderValue}
+            onSlidingStart={slidingStarted}
+            onSlidingComplete={slidingCompleted}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+          /> */}
         </View>
       </View>
       <View style={styles.bottom}>
@@ -119,14 +135,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25
   },
   userImage: {
-    height: 25,
-    width: 25,
-    borderRadius: 25
+    height: 30,
+    width: 30,
+    borderRadius: 10
   },
   audioImage: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 400,
+    height: 350,
     padding: 25,
     alignSelf: 'stretch',
     borderRadius: 10,
