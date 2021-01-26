@@ -25,7 +25,9 @@
     "react-native-screens": "^2.15.2",
     "react-native-swift": "^1.2.3",
     "react-native-track-player": "^1.2.3",
-    "react-native-vector-icons": "^8.0.0"
+    "react-native-vector-icons": "^8.0.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

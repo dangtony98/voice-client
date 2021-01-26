@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import TrackPlayer from 'react-native-track-player';
+import { connect } from 'react-redux';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Slider from '@react-native-community/slider';
-import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
 
-export default () => {
-  const [isPlaying, setIsPlaying] = useState(0);
+export const audioBar = ({ 
+  currentAudioId, 
+  currentAudioUser, 
+  currentAudioCaption
+}) => {
   const [sliderValue, setSliderValue] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
-  const { position, duration } = useTrackPlayerProgress(250);
+  const { position, duration } = useTrackPlayerProgress(100);
+  const playbackState = usePlaybackState();
+
+  useEffect(() => {
+    if (!isSeeking && position && duration) {
+      setSliderValue(position / duration);
+    }
+  }, [position, duration]);
 
   const slidingStarted = () => {
     setIsSeeking(true);
@@ -20,22 +32,36 @@ export default () => {
     setIsSeeking(false);
   };
 
-  useEffect(() => {
-    if (!isSeeking && position && duration) {
-      setSliderValue(position / duration);
+  const togglePlay = () => {
+    if (playbackState == TrackPlayer.STATE_PAUSED) {
+      TrackPlayer.play();
+    } else {
+      TrackPlayer.pause();
     }
-  }, [position, duration]);
+  }
 
-  return (
+  return currentAudioId ? (
     <View style={styles.audioBar}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <View 
-          style={{ height: 30, width: 30, borderRadius: 10, backgroundColor: 'rgba(52, 152, 219, 0.25)' }} 
-        />
-        <View style={{ marginLeft: 15 }}>
-          <Text style={{ fontWeight: '500' }}>maidul98</Text>
-          <Text>Why I won't be taking the covid...</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View 
+            style={{ height: 30, width: 30, borderRadius: 10, backgroundColor: 'rgba(52, 152, 219, 0.25)' }} 
+          />
+          <View style={{ marginLeft: 15 }}>
+            <Text style={{ fontWeight: '500' }}>{currentAudioUser}</Text>
+            <Text>{currentAudioCaption.substring(0, 40)}</Text>
+          </View>
         </View>
+        <TouchableOpacity 
+          activeOpacity={0.5}
+          onPress={togglePlay}
+        >
+          {(playbackState == TrackPlayer.STATE_PLAYING) ? (
+            <Icon name="pause" size={25} color="rgb(52, 152, 219)" />
+          ) : (
+            <Icon name="play" size={25} color="rgb(52, 152, 219)" />
+          )}
+        </TouchableOpacity>
       </View>
       <Slider
           style={{height: 20, width: '100%', marginTop: 15 }}
@@ -48,8 +74,18 @@ export default () => {
           maximumTrackTintColor="rgb(127,140,141)"
         />
     </View>
+  ) : (
+    <View />
   );
 }
+
+const mapStateToProps = ({ audio}) => ({
+  currentAudioId: audio.currentAudioId,
+  currentAudioCaption: audio.currentAudioCaption,
+  currentAudioUser: audio.currentAudioUser
+});
+
+export default connect(mapStateToProps, null)(audioBar)
 
 const styles = StyleSheet.create({
   audioBar: {

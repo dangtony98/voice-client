@@ -1,63 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import TrackPlayer from 'react-native-track-player';
-import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';
+import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AudioToggle from './AudioToggle';
+import { setCurrentAudio } from '../../actions/audio';
 
-export default ({ user, caption, votes, comments_count, id, navigation }) => {
-  const [isPlaying, setIsPlaying] = useState(0);
-  const [sliderValue, setSliderValue] = useState(0);
-  const [isSeeking, setIsSeeking] = useState(false);
-  const { position, duration } = useTrackPlayerProgress(250);
-
-  useEffect(() => {
-    if (!isSeeking && position && duration) {
-      setSliderValue(position / duration);
-    }
-  }, [position, duration]);
-
-  const slidingStarted = () => {
-    setIsSeeking(true);
-  };
-
-  const slidingCompleted = async value => {
-    await TrackPlayer.seekTo(value * duration);
-    setSliderValue(value);
-    setIsSeeking(false);
-  };
+export const audio = ({ 
+  user, 
+  caption, 
+  votes, 
+  comments_count, 
+  id, 
+  currentAudioId, 
+  setCurrentAudio, 
+  navigation 
+}) => {
+  const playbackState = usePlaybackState();
 
   const togglePlay = async () => {
-    let trackId = await TrackPlayer.getCurrentTrack();
-
-    if (trackId == id) {
-      // case: post in view is post that is playing
-      if (isPlaying) {
-        TrackPlayer.pause();
-        setIsPlaying(false);
+      if ((currentAudioId != id)) {
+        // case: switch tracks  
+        await TrackPlayer.skip(id);
+        await TrackPlayer.play();
+        setCurrentAudio(id, caption, user.username);
       } else {
-        TrackPlayer.play();
-        setIsPlaying(true);
+        if (playbackState == TrackPlayer.STATE_PAUSED) {
+          await TrackPlayer.play();
+        } else {
+          await TrackPlayer.pause();
+        }
       }
-    } else {
-      // case: post in view is not post that is playing
-      setIsPlaying(true);
-      TrackPlayer.pause();
-      TrackPlayer.skip(id);
-      TrackPlayer.play();
-    }
-  }
-
-  const handleVote = (vote) => {
-    // TO-DO: hook up API here
-    switch (vote) {
-      case 'upvote':
-        // TO-DO
-        break;
-      case 'downvote':
-        // TO-DO
-        break;
-    }
   }
 
   const onCommentsPressed = () => {
@@ -77,23 +50,11 @@ export default ({ user, caption, votes, comments_count, id, navigation }) => {
         />
         <Text style={{ fontWeight: '500' }}>{user.username}</Text>
       </View>
-      <View style={styles.audioImage}>
-        <View style={{ alignItems: 'center' }}>
-          <AudioToggle 
-            isPlaying={isPlaying}
-            onPress={() => togglePlay()}
-          />
-          {/* <Slider
-            style={{height: 20, width: 300, marginTop: 15 }}
-            minimumValue={0}
-            maximumValue={1}
-            value={sliderValue}
-            onSlidingStart={slidingStarted}
-            onSlidingComplete={slidingCompleted}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
-          /> */}
-        </View>
+      <View style={[styles.audioImage, { alignItems: 'center' }]}>
+        <AudioToggle 
+          isPlaying={playbackState == TrackPlayer.STATE_PLAYING && currentAudioId == id}
+          onPress={() => togglePlay()}
+        />
       </View>
       <View style={styles.bottom}>
         <View style={styles.bottomGroup}>
@@ -127,6 +88,16 @@ export default ({ user, caption, votes, comments_count, id, navigation }) => {
     </View>
   );
 }
+
+const mapStateToProps = ({ audio}) => ({
+  currentAudioId: audio.currentAudioId
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentAudio: (id, caption, user) => dispatch(setCurrentAudio(id, caption, user))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(audio);
 
 const styles = StyleSheet.create({
   audio: {

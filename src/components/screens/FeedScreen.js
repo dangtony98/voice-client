@@ -1,38 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, Text, StyleSheet } from 'react-native';
-// import Slider from '@react-native-community/slider';
 import TextInput from '../generic/TextInput';
 import TouchableOpacity from '../generic/TouchableOpacity';
 import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
 import AudioBar from '../audio/AudioBar';
 import { get_feed, get_audio } from '../../service/api/posts';
-
-// audio bar development
-// import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';
-
-// const track = {
-//   id: '111',
-//   url: 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3',
-//   title: 'test',
-//   artist: 'test2'
-// }
-
-// TrackPlayer.add([track]).then(() => {    
-//   // Added track
-// });
-
-// const createTrack2 = async (audioKey, username, caption) => {
-//   // get_audio will be defunct
-//   get_audio("1611469547979.mp3", (audioUrl) => {
-//     return {
-//       id: audioKey,
-//       url: audioUrl,
-//       title: caption,
-//       artist: username
-//     }
-//   });
-// }
 
 const addTracks = (feed) => {
   const tracks = feed.map(post => ({
@@ -42,8 +15,7 @@ const addTracks = (feed) => {
     artist: post.user.username
   }));
   TrackPlayer.add(tracks).then(() => {    
-    console.log('TrackPlayer added tracks: ');
-    console.log(tracks);
+
   });
 }
 

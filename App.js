@@ -7,6 +7,8 @@
  */
 
 import React from 'react';
+import { Provider } from 'react-redux';
+import store from './src/store/store';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -18,7 +20,6 @@ import LoginScreen from './src/components/screens/LoginScreen';
 import FeedScreen from './src/components/screens/FeedScreen';
 import UploadScreen from './src/components/screens/UploadScreen';
 import UserScreen from './src/components/screens/UserScreen';
-
 import UploadModal from './src/components/modals/UploadModal';
 import CommentsModal from './src/components/modals/CommentsModal';
 
@@ -109,25 +110,27 @@ const HomeTabScreen = () => (
 const App: () => React$Node = () => {
   return (
     <>
-      <NavigationContainer>
-        <AuthStack.Navigator 
-          initialRouteName="Login"
-          screenOptions={{ headerShown: false }}
-        >
-          <AuthStack.Screen 
-            name="Register" 
-            component={RegisterScreen}
-          />
-          <AuthStack.Screen 
-            name="Login" 
-            component={LoginScreen} 
-          />
-          <AuthStack.Screen
-            name="Main"
-            component={MainStackScreen}
-          />
-        </AuthStack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <AuthStack.Navigator 
+            initialRouteName="Login"
+            screenOptions={{ headerShown: false }}
+          >
+            <AuthStack.Screen 
+              name="Register" 
+              component={RegisterScreen}
+            />
+            <AuthStack.Screen 
+              name="Login" 
+              component={LoginScreen} 
+            />
+            <AuthStack.Screen
+              name="Main"
+              component={MainStackScreen}
+            />
+          </AuthStack.Navigator>
+        </NavigationContainer>
+      </Provider>
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Image, Text, FlatList, Dimensions, StyleSheet } from 'react-native';
-import { login } from '../../service/api/users';
+import AudioBar from '../audio/AudioBar';
 
 const DATA = [
   { key: 'a', caption: 'Lorem ipsum dolor sit adipiscing elit1' }, 
@@ -65,6 +65,7 @@ export default ({ navigation }) => {
           onRefresh={() => console.log('Refresh triggered')}
           style={{ flexGrow: 1 }}
         />
+      <AudioBar />
     </View>
   );
 }
