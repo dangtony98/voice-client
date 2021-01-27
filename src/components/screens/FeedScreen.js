@@ -29,15 +29,15 @@ export default ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [isFetching, setIsFetching] = useState(false); // TO-DO: Review
   const feedRef = useRef(null);
-  const { position, duration } = useTrackPlayerProgress(100);
+  // const { position, duration } = useTrackPlayerProgress(100);
 
-  useEffect(() => {
-    if (position && duration) {
-      if (position / duration > 0.99) {
-        goIndex();
-      }
-    }
-  }, [position, duration]);
+  // useEffect(() => {
+  //   if (position && duration) {
+  //     if (position / duration > 0.99) {
+  //       goIndex();
+  //     }
+  //   }
+  // }, [position, duration]);
 
   useEffect(() => {
     get_feed(skip, feed => {
