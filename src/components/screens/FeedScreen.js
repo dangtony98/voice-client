@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, View, Text, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
 import TouchableOpacity from '../generic/TouchableOpacity';
@@ -6,6 +6,9 @@ import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
 import AudioBar from '../audio/AudioBar';
 import { get_feed, get_audio } from '../../service/api/posts';
+import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
+
+const POST_HEIGHT = 519;
 
 const addTracks = (feed) => {
   const tracks = feed.map(post => ({
@@ -24,7 +27,17 @@ export default ({ navigation }) => {
   const [selected, setSelected] = useState("trending");
   const [skip, setSkip] = useState(0);
   const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(false); // TO-DO: Review
+  const feedRef = useRef(null);
+  const { position, duration } = useTrackPlayerProgress(100);
+
+  useEffect(() => {
+    if (position && duration) {
+      if (position / duration > 0.99) {
+        goIndex();
+      }
+    }
+  }, [position, duration]);
 
   useEffect(() => {
     get_feed(skip, feed => {
@@ -68,6 +81,11 @@ export default ({ navigation }) => {
     })
   }
 
+  const goIndex = () => {
+    console.log(feedRef.current);
+    feedRef.current.scrollToIndex({ animated: true, index: 1 });
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.navBar}>
@@ -103,8 +121,10 @@ export default ({ navigation }) => {
         refreshing={isFetching}
         snapToAlignment={"start"}
         decelerationRate={"fast"}
-        snapToInterval={519}
+        snapToInterval={POST_HEIGHT}
         pagingEnabled
+        getItemLayout={(data, index) => ({ length: POST_HEIGHT, offset: POST_HEIGHT * index, index })}
+        ref={feedRef}
         style={{ flexGrow: 1 }}
       />
       <AudioBar />
