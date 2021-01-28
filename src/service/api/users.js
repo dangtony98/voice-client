@@ -1,8 +1,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEVELOPMENT_URL, PRODUCTION_URL } from '../constants';
 
 const register = async (payload, callback) => {
-  axios.post(`http://127.0.0.1:3000/users/register`, payload)
+  axios.post(`${PRODUCTION_URL}/users/register`, payload)
   .then(response => {
       AsyncStorage.setItem('userToken', response.data.token);
       AsyncStorage.setItem('user', response.data.user);
@@ -14,7 +15,7 @@ const register = async (payload, callback) => {
 }
 
 const login = async (payload, callback) => {
-  axios.post(`http://127.0.0.1:3000/users/login`, payload)
+  axios.post(`${PRODUCTION_URL}/users/login`, payload)
   .then(response => {
       AsyncStorage.setItem('userToken', response.data.token);
       AsyncStorage.setItem('user', JSON.stringify(response.data.user));
@@ -26,7 +27,7 @@ const login = async (payload, callback) => {
 }
 
 const get_user = async (callback) => {
-  axios.get(`http://127.0.0.1:3000/users/user`)
+  axios.get(`${PRODUCTION_URL}/users/user`)
   .then(response => {
       console.log('user');
       console.log(response.data);

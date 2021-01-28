@@ -59,5 +59,11 @@
 	<false/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This application uses the microphone to record your speech</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>For choosing a photo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>For taking a photo</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>For saving a photo</string>
 </dict>
 </plist>

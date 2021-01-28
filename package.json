@@ -21,6 +21,7 @@
     "react-native": "0.63.4",
     "react-native-audio-recorder-player": "^2.6.0",
     "react-native-gesture-handler": "^1.9.0",
+    "react-native-image-picker": "^3.1.4",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.15.2",

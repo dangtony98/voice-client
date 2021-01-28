@@ -1,8 +1,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PRODUCTION_URL } from '../constants';
 
 const get_feed = async (skip, callback) => {
-  axios.get(`http://127.0.0.1:3000/posts/trending-posts?skip=${skip}`)
+  axios.get(`${PRODUCTION_URL}/posts/trending-posts?skip=${skip}`)
   .then(response => {
       callback(response.data);
   })
@@ -14,7 +15,7 @@ const get_feed = async (skip, callback) => {
 const get_audio = async (audio_key, callback) => {
   const token = await AsyncStorage.getItem('userToken');
   console.log(token);
-  axios.get(`http://127.0.0.1:3000/posts/audio/${audio_key}`,
+  axios.get(`${PRODUCTION_URL}/posts/audio/${audio_key}`,
   {
     headers: {
       Accept: 'application/json', 

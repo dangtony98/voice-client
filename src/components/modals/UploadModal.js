@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Platform, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Platform, Dimensions, ActionSheetIOS, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -7,6 +7,7 @@ import AudioRecorderPlayer, {
   AudioEncoderAndroidType,
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 export default ({ navigation }) => {  
   const windowWidth = Dimensions.get('window').width;
@@ -22,7 +23,7 @@ export default ({ navigation }) => {
   const [recordState, setRecordState] = useState('NOT_STARTED');
 
   // edit state
-  const [isImageAttached, setIsImageAttached] = useState('');
+  const [image, setImage] = useState(null);
   const [caption, setCaption] = useState('');
   const stepRef = useRef(null);
 
@@ -44,6 +45,7 @@ export default ({ navigation }) => {
   };
 
   const onClosePressed = () => {
+    // clear all audio, caption etc.
     navigation.navigate('Feed');
   }
 
@@ -120,18 +122,18 @@ export default ({ navigation }) => {
     }
   }
 
-  const renderIcon = () => {
+  const renderIcon = (size) => {
     switch (recordState) {
       case 'NOT_STARTED':
-        return <Icon name="mic" size={40} color="rgb(255, 255, 255)" />;
+        return <Icon name="mic" size={size} color="rgb(255, 255, 255)" />;
       case 'STARTED':
-        return <Icon name="stop" size={40} color="rgb(255, 255, 255)" />;
+        return <Icon name="stop" size={size} color="rgb(255, 255, 255)" />;
       case 'FINISHED':
-        return <Icon name="play" size={40} color="rgb(255, 255, 255)" />;
+        return <Icon name="play" size={size} color="rgb(255, 255, 255)" />;
       case 'PLAYING':
-        return <Icon name="pause" size={40} color="rgb(255, 255, 255)" />;
+        return <Icon name="pause" size={size} color="rgb(255, 255, 255)" />;
       case 'PAUSED':
-        return <Icon name="play" size={40} color="rgb(255, 255, 255)" />;
+        return <Icon name="play" size={size} color="rgb(255, 255, 255)" />;
     }
   }
 
@@ -139,6 +141,7 @@ export default ({ navigation }) => {
     onStopPlay();
     setRecordState('NOT_STARTED');
     setRecordTime('00:00:00');
+    setImage(null);
   }
 
   const onHandleDone = () => {
@@ -161,6 +164,44 @@ export default ({ navigation }) => {
     return <View />
   }
 
+  const onHandleChooseImage = () => {
+    if (Platform.OS == 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["Cancel", "Take Photo", "Choose from Library"],
+          cancelButtonIndex: 0
+        },
+        buttonIndex => {
+          if (buttonIndex === 0) {
+            // case: cancel
+          } else if (buttonIndex === 1) {
+            // case: take photo with camera
+            const options = {
+              storageOptions: {
+                skipBackup: true,
+                path: 'images',
+              },
+            };
+            launchCamera(options, (response) => {
+              setImage(response);
+            });
+          } else if (buttonIndex === 2) {
+            // case: chose from library
+            const options = {
+              noData: true,
+              mediaType: 'photo'
+            }
+        
+            launchImageLibrary(options, response => {
+              if (response.uri) {
+                setImage(response);
+              }
+            });
+          }
+        });
+    }
+  };
+
   const handleScroll = (x) => {
     stepRef.current.scrollTo({x, y: 0, animated: true})
   };
@@ -173,12 +214,11 @@ export default ({ navigation }) => {
       scrollEnabled={false}
       ref={stepRef}
     >
-      
       <View style={[styles.recordScreen, { width: windowWidth, backgroundColor: 'rgb(52, 152, 219)' }]}>
         <View>
-          <Text style={[{ fontWeight: '500', fontSize: 20, color: 'rgb(255, 255, 255)'}, styles]}>
-            Home
-          </Text>
+          {/* <Text style={[{ fontWeight: '500', fontSize: 15, color: 'rgb(255, 255, 255)'}, styles]}>
+            New Post
+          </Text> */}
         </View>
         <Text style={styles.recordTime}>
           {recordTime}
@@ -191,7 +231,7 @@ export default ({ navigation }) => {
             style={styles.recordOutside}
           >
             <View style={styles.recordInside}>
-              {renderIcon()}
+              {renderIcon(40)}
             </View>
           </TouchableOpacity>
           {renderTouchable('Done', onHandleDone, { marginLeft: 25 })}
@@ -205,20 +245,44 @@ export default ({ navigation }) => {
         >
           <Icon name="chevron-back-outline" size={25} color="rgb(127,140,141)" />
         </TouchableOpacity>
+        <Text style={[{ fontWeight: '500', fontSize: 15, color: 'rgb(52,152,219)'}]}>
+          New Post
+        </Text>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => console.log('sdf')}
         >
-          <Text style={{ fontWeight: '500', color: 'rgb(52,152,219)'}}>Share</Text>
+          <Text style={{ fontWeight: '500', color: 'rgb(52, 152, 219)'}}>Share</Text>
         </TouchableOpacity>
+        </View>
+        <View style={styles.editAudio}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => onHandleRecord()}
+          >
+            {renderIcon(25)}
+          </TouchableOpacity>
+          <Text style={{ fontWeight: '500', color: 'white' }}>{recordTime}</Text>
         </View>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => console.log('aaa')}
+          onPress={() => onHandleChooseImage()}
+          style={{ marginTop: 15 }}
         >
-          <View style={[styles.editImage, { marginTop: 25 }]}>
-
-          </View>
+          {(image == null) ? (
+            <View style={[styles.editImage, { 
+              backgroundColor: 'rgba(52, 152, 219, 0.25)', 
+              alignItems: 'center', 
+              justifyContent: 'center' 
+            }]}>
+              <Icon name="image" size={40} color="rgb(255, 255, 255)" />
+            </View>
+          ) : (
+            <Image 
+              source={{ uri: image.uri }}
+              style={styles.editImage}
+            />
+          )}
         </TouchableOpacity>
         <TextInput
           value={caption}
@@ -277,10 +341,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', 
     width: '100%'
   },
+  editAudio: { 
+    height: 50, 
+    width: '100%', 
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgb(52, 152, 219)',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgb(52, 152, 219)',
+    marginTop: 25 
+  },
   editImage: {
     height: 350, 
     width: '100%', 
-    borderRadius: 10,
-    backgroundColor: 'rgba(52, 152, 219, 0.25)'
+    borderRadius: 10
   }
 });
