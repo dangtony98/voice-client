@@ -8,6 +8,7 @@ import AudioRecorderPlayer, {
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
 
 export default ({ navigation }) => {  
   const windowWidth = Dimensions.get('window').width;
@@ -31,11 +32,6 @@ export default ({ navigation }) => {
     setAudioRecorderPlayer(new AudioRecorderPlayer());
   }, []);
 
-  const path = Platform.select({
-    ios: 'hello.m4a',
-    android: 'sdcard/hello.mp4',
-  });
-
   const audioSet = {
     AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
     AudioSourceAndroid: AudioSourceAndroidType.MIC,
@@ -50,7 +46,7 @@ export default ({ navigation }) => {
   }
 
   const onStartRecord = async () => {
-    const result = await audioRecorderPlayer.startRecorder(path, audioSet);
+    const result = await audioRecorderPlayer.startRecorder();
     audioRecorderPlayer.addRecordBackListener((e) => {
       setRecordState('STARTED');
       setRecordSecs(e.current_position);
@@ -65,12 +61,8 @@ export default ({ navigation }) => {
     setRecordSecs(0);
   };
 
-  const onStartPlay = async () => {
-    const path = Platform.select({
-      ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4',
-    });
-    const msg = await audioRecorderPlayer.startPlayer(path);
+  const onStartPlay = async () => {    
+    const msg = await audioRecorderPlayer.startPlayer();
     audioRecorderPlayer.setVolume(1.0);
     audioRecorderPlayer.addPlayBackListener((e) => {
       if (e.current_position === e.duration) {
