@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AudioToggle from './AudioToggle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setCurrentAudio } from '../../actions/audio';
+import { cast_vote } from '../../service/api/votes';
 
 export const audio = ({ 
   user, 
@@ -17,7 +19,21 @@ export const audio = ({
   navigation 
 }) => {
   const playbackState = usePlaybackState();
-  const [vote, setVote] = useState('NONE'); // NONE, UP, DOWN
+  const [voteCount, setVoteCount] = useState(votes.voteCounts);
+  const [voteState, setVoteState] = useState('NONE');
+
+  useEffect(() => {
+    (async () => {
+      const user = JSON.parse(await AsyncStorage.getItem('user'));
+      if (votes.downvoters.includes(user._id)) {
+        setVoteState('DOWN');
+      }
+      
+      if (votes.upvoters.includes(user._id)) {
+        setVoteState('UP');
+      }
+    })();
+  }, []);
 
   const togglePlay = async () => {
       if ((currentAudioId != id)) {
@@ -35,15 +51,33 @@ export const audio = ({
   }
 
   const onHandleVote = (vote) => {
-    switch (vote) {
-      case 'UP':
-        // Send POST with 'up'
-        break;
-      case 'DOWN':
-        // Send POST with 'down'
-        break;
-    }
-    console.log('onHandleVote()');
+      if (voteState == vote) {
+        // case: casted vote is same as vote state
+        cast_vote({ voteType: '', postId: id }, () => {
+          setVoteState('NONE');
+          vote == 'UP' 
+          ? setVoteCount(voteCount - 1) 
+          : setVoteCount(voteCount + 1);
+        });
+      } else {
+        // case: casted vote is different from vote state
+        cast_vote({ voteType: vote.toLowerCase(), postId: id }, () => {
+          setVoteState(vote);
+          switch (voteState) {
+            case 'UP':
+              setVoteCount(voteCount - 2);
+              break;
+            case 'DOWN':
+              setVoteCount(voteCount + 2);
+              break;
+            case 'NONE':
+              vote == 'UP' 
+              ? setVoteCount(voteCount + 1) 
+              : setVoteCount(voteCount - 1);
+              break;
+          }
+        });
+      }
   }
 
   const onCommentsPressed = () => {
@@ -73,23 +107,23 @@ export const audio = ({
         <View style={styles.bottomGroup}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => onHandleVote()}
+            onPress={() => onHandleVote('UP')}
           >
             <Icon 
               name="arrow-up" 
               size={25} 
-              color="rgb(127,140,141)" 
+              color={(voteState == 'UP') ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'}
             />
           </TouchableOpacity>
-          <Text style={{ marginLeft: 5, fontWeight: '500' }}>{votes.voteCounts}</Text>
+          <Text style={{ marginLeft: 5, fontWeight: '500' }}>{voteCount}</Text>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => onHandleVote()}
+            onPress={() => onHandleVote('DOWN')}
           >
             <Icon 
               name="arrow-down" 
               size={25} 
-              color="rgb(127,140,141)"
+              color={(voteState == 'DOWN') ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'}
               style={{ marginLeft: 5 }} 
             />
           </TouchableOpacity>

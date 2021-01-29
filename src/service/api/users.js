@@ -19,8 +19,7 @@ const login = async (payload, callback) => {
   .then(response => {
       AsyncStorage.setItem('userToken', response.data.token);
       AsyncStorage.setItem('user', JSON.stringify(response.data.user));
-      console.log('Login: ');
-      console.log(response.data.token);
+      console.log(response.data.user);
       callback();
   })
   .catch((error) => {
@@ -31,8 +30,6 @@ const login = async (payload, callback) => {
 const get_user = async (callback) => {
   axios.get(`${PRODUCTION_URL}/users/user`)
   .then(response => {
-      console.log('user');
-      console.log(response.data);
       AsyncStorage.setItem('user', JSON.stringify(response.data));
       callback();
   })
