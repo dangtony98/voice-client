@@ -17,6 +17,7 @@ export const audio = ({
   navigation 
 }) => {
   const playbackState = usePlaybackState();
+  const [vote, setVote] = useState('NONE'); // NONE, UP, DOWN
 
   const togglePlay = async () => {
       if ((currentAudioId != id)) {
@@ -31,6 +32,18 @@ export const audio = ({
           await TrackPlayer.pause();
         }
       }
+  }
+
+  const onHandleVote = (vote) => {
+    switch (vote) {
+      case 'UP':
+        // Send POST with 'up'
+        break;
+      case 'DOWN':
+        // Send POST with 'down'
+        break;
+    }
+    console.log('onHandleVote()');
   }
 
   const onCommentsPressed = () => {
@@ -58,18 +71,28 @@ export const audio = ({
       </View>
       <View style={styles.bottom}>
         <View style={styles.bottomGroup}>
-          <Icon 
-            name="arrow-up" 
-            size={25} 
-            color="rgb(127,140,141)" 
-          />
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => onHandleVote()}
+          >
+            <Icon 
+              name="arrow-up" 
+              size={25} 
+              color="rgb(127,140,141)" 
+            />
+          </TouchableOpacity>
           <Text style={{ marginLeft: 5, fontWeight: '500' }}>{votes.voteCounts}</Text>
-          <Icon 
-            name="arrow-down" 
-            size={25} 
-            color="rgb(127,140,141)"
-            style={{ marginLeft: 5 }} 
-          />
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => onHandleVote()}
+          >
+            <Icon 
+              name="arrow-down" 
+              size={25} 
+              color="rgb(127,140,141)"
+              style={{ marginLeft: 5 }} 
+            />
+          </TouchableOpacity>
         </View>
         <TouchableOpacity 
           activeOpacity={0.5}

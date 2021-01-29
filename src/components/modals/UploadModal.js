@@ -8,7 +8,7 @@ import AudioRecorderPlayer, {
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import RNFS from 'react-native-fs';
+import { post_audio } from '../../service/api/posts';
 
 export default ({ navigation }) => {  
   const windowWidth = Dimensions.get('window').width;
@@ -21,6 +21,7 @@ export default ({ navigation }) => {
   const [currentDurationSec, setCurrentDurationSec] = useState(0);
   const [playTime, setPlayTime] = useState('00:00:00');
   const [duration, setDuration] = useState('00:00:00');
+  const [audioUri, setAudioUri] = useState(null);
   const [recordState, setRecordState] = useState('NOT_STARTED');
 
   // edit state
@@ -57,6 +58,7 @@ export default ({ navigation }) => {
   const onStopRecord = async () => {
     const result = await audioRecorderPlayer.stopRecorder();
     audioRecorderPlayer.removeRecordBackListener();
+    setAudioUri(result);
     setRecordState('FINISHED');
     setRecordSecs(0);
   };
@@ -194,6 +196,26 @@ export default ({ navigation }) => {
     }
   };
 
+  const onHandleSharePressed = () => {
+    // TO-DO: Add image upload capability once backend is done
+    if (caption != '' && recordState != 'NOT_STARTED') {
+        let formData = new FormData();
+        formData.append('caption', caption);
+        formData.append('audio_file', {
+          uri: audioUri,
+          name: 'sound.m4a',
+          type: 'audio/m4a',
+        });
+        post_audio(formData, () => {
+          onStopPlay();
+          setRecordState('NOT_STARTED');
+          setRecordTime('00:00:00');
+          setImage(null);
+          navigation.navigate('Home');
+        });
+    }
+  }
+
   const handleScroll = (x) => {
     stepRef.current.scrollTo({x, y: 0, animated: true})
   };
@@ -242,7 +264,7 @@ export default ({ navigation }) => {
         </Text>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => console.log('sdf')}
+          onPress={() => onHandleSharePressed()}
         >
           <Text style={{ fontWeight: '500', color: 'rgb(52, 152, 219)'}}>Share</Text>
         </TouchableOpacity>
@@ -278,7 +300,7 @@ export default ({ navigation }) => {
         </TouchableOpacity>
         <TextInput
           value={caption}
-          onChange={text => setCaption(text)}
+          onChangeText={text => setCaption(text)}
           placeholder="Write a caption..."
           multiline={true}
           style={{ flex: 1, marginTop: 15 }}

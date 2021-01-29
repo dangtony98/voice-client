@@ -19,6 +19,8 @@ const login = async (payload, callback) => {
   .then(response => {
       AsyncStorage.setItem('userToken', response.data.token);
       AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+      console.log('Login: ');
+      console.log(response.data.token);
       callback();
   })
   .catch((error) => {
