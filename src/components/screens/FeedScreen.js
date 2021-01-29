@@ -5,7 +5,8 @@ import TouchableOpacity from '../generic/TouchableOpacity';
 import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
 import AudioBar from '../audio/AudioBar';
-import { get_feed, get_audio } from '../../service/api/posts';
+import { get_feed } from '../../service/api/posts';
+import { useIsFocused } from "@react-navigation/native";
 import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
 
 const POST_HEIGHT = 519;
@@ -29,6 +30,7 @@ export default ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [isFetching, setIsFetching] = useState(false); // TO-DO: Review
   const feedRef = useRef(null);
+  const isFocused = useIsFocused();
   // const { position, duration } = useTrackPlayerProgress(100);
 
   // useEffect(() => {
@@ -45,7 +47,7 @@ export default ({ navigation }) => {
       setSkip(prevState => prevState + feed.length);
       addTracks(feed);
     });
-  }, []);
+  }, [isFocused]);
 
   const renderItem = ({ item }) => {
     return (
@@ -134,7 +136,7 @@ export default ({ navigation }) => {
 
 const styles = StyleSheet.create({
   navBar: {
-    paddingTop: 100,
+    paddingTop: 75,
     paddingHorizontal: 25,
     backgroundColor: 'rgb(255, 255, 255)',
   },

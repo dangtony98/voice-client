@@ -76,7 +76,7 @@ export default ({ navigation }) => {
 const styles = StyleSheet.create({
   top: {
     backgroundColor: 'rgb(255, 255, 255)',
-    paddingTop: 100,
+    paddingTop: 75,
     alignItems: 'center',
     justifyContent: 'center'
   },

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Platform, Dimensions, ActionSheetIOS, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Platform, Dimensions, ActionSheetIOS, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -138,6 +138,11 @@ export default ({ navigation }) => {
     setImage(null);
   }
 
+  const onHandleCancel = () => {
+    onHandleReset();
+    navigation.navigate('Home');
+  }
+
   const onHandleDone = () => {
     handleScroll(windowWidth);
   }
@@ -149,7 +154,7 @@ export default ({ navigation }) => {
           activeOpacity={0.5}
           onPress={() => onPress()}
         >
-          <Text style={[{ fontWeight: '500', fontSize: 15, color: 'rgb(255, 255, 255)'}, styles]}>
+          <Text style={[{ fontWeight: '500', color: 'rgb(255, 255, 255)'}, styles]}>
             {text}
           </Text>
         </TouchableOpacity>
@@ -207,10 +212,7 @@ export default ({ navigation }) => {
           type: 'audio/m4a',
         });
         post_audio(formData, () => {
-          onStopPlay();
-          setRecordState('NOT_STARTED');
-          setRecordTime('00:00:00');
-          setImage(null);
+          onHandleReset();
           navigation.navigate('Home');
         });
     }
@@ -229,11 +231,15 @@ export default ({ navigation }) => {
       ref={stepRef}
     >
       <View style={[styles.recordScreen, { width: windowWidth, backgroundColor: 'rgb(52, 152, 219)' }]}>
-        <View>
-          {/* <Text style={[{ fontWeight: '500', fontSize: 15, color: 'rgb(255, 255, 255)'}, styles]}>
-            New Post
-          </Text> */}
-        </View>
+        <TouchableOpacity 
+          activeOpacity={0.5}
+          onPress={() => onHandleCancel()}
+          style={{ alignSelf: 'stretch' }}
+        >
+          <Text style={{ fontWeight: '500', color: 'rgb(255, 255, 255)'}}>
+            Cancel
+          </Text>
+        </TouchableOpacity>
         <Text style={styles.recordTime}>
           {recordTime}
         </Text>
@@ -251,68 +257,74 @@ export default ({ navigation }) => {
           {renderTouchable('Done', onHandleDone, { marginLeft: 25 })}
         </View>
       </View>
+      
       <View style={[styles.editScreen, { width: windowWidth, backgroundColor: 'rgb(255, 255, 255)' }]}>
-        <View style={styles.editTop}>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => handleScroll(0)}
-        >
-          <Icon name="chevron-back-outline" size={25} color="rgb(127,140,141)" />
-        </TouchableOpacity>
-        <Text style={[{ fontWeight: '500', fontSize: 15, color: 'rgb(52,152,219)'}]}>
-          New Post
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => onHandleSharePressed()}
-        >
-          <Text style={{ fontWeight: '500', color: 'rgb(52, 152, 219)'}}>Share</Text>
-        </TouchableOpacity>
-        </View>
-        <View style={styles.editAudio}>
+          <View style={styles.editTop}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => onHandleRecord()}
+            onPress={() => handleScroll(0)}
           >
-            {renderIcon(25)}
+            <Icon name="chevron-back-outline" size={25} color="rgb(127,140,141)" />
           </TouchableOpacity>
-          <Text style={{ fontWeight: '500', color: 'white' }}>{recordTime}</Text>
-        </View>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => onHandleChooseImage()}
-          style={{ marginTop: 15 }}
-        >
-          {(image == null) ? (
-            <View style={[styles.editImage, { 
-              backgroundColor: 'rgba(52, 152, 219, 0.25)', 
-              alignItems: 'center', 
-              justifyContent: 'center' 
-            }]}>
-              <Icon name="image" size={40} color="rgb(255, 255, 255)" />
-            </View>
-          ) : (
-            <Image 
-              source={{ uri: image.uri }}
-              style={styles.editImage}
+          <Text style={[{ fontWeight: '500', fontSize: 15, color: 'rgb(52,152,219)'}]}>
+            New Post
+          </Text>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => onHandleSharePressed()}
+          >
+            <Text style={{ fontWeight: '500', color: 'rgb(52, 152, 219)'}}>Share</Text>
+          </TouchableOpacity>
+          </View>
+          <View style={styles.editAudio}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => onHandleRecord()}
+            >
+              {renderIcon(25)}
+            </TouchableOpacity>
+            <Text style={{ fontWeight: '500', color: 'white' }}>{recordTime}</Text>
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => onHandleChooseImage()}
+            style={{ marginTop: 15 }}
+          >
+            {(image == null) ? (
+              <View style={[styles.editImage, { 
+                backgroundColor: 'rgba(52, 152, 219, 0.25)', 
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              }]}>
+                <Icon name="image" size={40} color="rgb(255, 255, 255)" />
+              </View>
+            ) : (
+              <Image 
+                source={{ uri: image.uri }}
+                style={styles.editImage}
+              />
+            )}
+          </TouchableOpacity>
+          <KeyboardAvoidingView
+            behavior="padding"
+            enabled
+          >
+            <TextInput
+              value={caption}
+              onChangeText={text => setCaption(text)}
+              placeholder="Write a caption..."
+              multiline={true}
             />
-          )}
-        </TouchableOpacity>
-        <TextInput
-          value={caption}
-          onChangeText={text => setCaption(text)}
-          placeholder="Write a caption..."
-          multiline={true}
-          style={{ flex: 1, marginTop: 15 }}
-        />
+          </KeyboardAvoidingView>
       </View>
     </ScrollView>
+
   ); 
 }
 
 const styles = StyleSheet.create({
   recordScreen: {
-    paddingVertical: 100,
+    paddingVertical: 75,
     paddingHorizontal: 25,
     flex: 1,
     alignItems: 'center', 
@@ -345,7 +357,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   editScreen: {
-    paddingVertical: 100,
+    paddingVertical: 75,
     paddingHorizontal: 25,
     flex: 1
   },
@@ -353,7 +365,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center', 
     justifyContent: 'space-between', 
-    width: '100%'
+    width: '100%',
   },
   editAudio: { 
     height: 50, 
@@ -366,10 +378,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'rgb(52, 152, 219)',
-    marginTop: 25 
+    marginTop: 25
   },
   editImage: {
-    height: 350, 
+    height: 350,
     width: '100%', 
     borderRadius: 10
   }

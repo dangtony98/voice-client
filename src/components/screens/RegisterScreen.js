@@ -27,40 +27,43 @@ export default ({ navigation }) => {
   }
 
   return (
-    <View style={styles.page}>
-      <Text style={styles.header}>Create an Account</Text>
-      {(step == 1) && (
-        <View>
-          <TextInput 
-            value={email}
-            placeholder="Email"
-            onChangeText={setEmail} 
-            otherStyles={{ marginTop: 20 }}
-          />
-          <TextInput 
-            value={password}
-            placeholder="Password" 
-            onChangeText={setPassword}
-            secureTextEntry={true}
-            otherStyles={{ marginTop: 10 }}
-          />
-        </View>  
-      )}
-      {(step == 2) && (
-        <View>
-          <TextInput 
-            value={username}
-            placeholder="Username"
-            onChangeText={setUsername} 
-            otherStyles={{ marginTop: 20 }}
-          />
-        </View>
-      )}
-      <TouchableHighlight
-        title={(step == 1) ? "Next" : "Sign Up"}
-        onPress={() => handleRegister()}
-        otherStyles={{ marginTop: 10 }}
-      />
+    <View style={styles.screen}>
+      <View>
+        <Text style={styles.header}>Create an Account</Text>
+        {(step == 1) && (
+          <View>
+            <TextInput 
+              value={email}
+              placeholder="Email"
+              onChangeText={setEmail} 
+              otherStyles={{ marginTop: 20 }}
+            />
+            <TextInput 
+              value={password}
+              placeholder="Password" 
+              onChangeText={setPassword}
+              secureTextEntry={true}
+              otherStyles={{ marginTop: 10 }}
+            />
+          </View>  
+        )}
+        {(step == 2) && (
+          <View>
+            <TextInput 
+              value={username}
+              placeholder="Username"
+              onChangeText={setUsername} 
+              otherStyles={{ marginTop: 20 }}
+            />
+            <View style={{ height: 47 }} />
+          </View>
+        )}
+        <TouchableHighlight
+          title={(step == 1) ? "Next" : "Sign Up"}
+          onPress={() => handleRegister()}
+          otherStyles={{ marginTop: 10 }}
+        />
+      </View>
     </View>
   );
 }
@@ -71,8 +74,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700"
   },
-  page: {
-    paddingVertical: 100,
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
     paddingHorizontal: 25
   }
 });
