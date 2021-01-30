@@ -21,13 +21,32 @@ import FeedScreen from './src/components/screens/FeedScreen';
 import UploadScreen from './src/components/screens/UploadScreen';
 import UserScreen from './src/components/screens/UserScreen';
 import SplashScreen from './src/components/screens/SplashScreen';
+import NotificationsScreen from './src/components/screens/NotificationsScreen';
 
 import { get_user } from './src/service/api/users';
 
 const AuthStack = createStackNavigator();
+const FeedStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function HomeTabScreen() {
+const FeedStackScreen = () => {
+  return (
+    <FeedStack.Navigator
+      screenOptions={{ headerShown: false }}
+    >
+      <FeedStack.Screen 
+        name="Feed"
+        component={FeedScreen}
+      />
+      <FeedStack.Screen 
+        name="Notifications"
+        component={NotificationsScreen}
+      />
+    </FeedStack.Navigator>
+  );
+}
+
+const HomeTabScreen = () => {
   return(
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -57,7 +76,7 @@ function HomeTabScreen() {
      
       <Tab.Screen 
         name="Feed" 
-        component={FeedScreen} 
+        component={FeedStackScreen} 
       />
       <Tab.Screen 
         name="Upload" 

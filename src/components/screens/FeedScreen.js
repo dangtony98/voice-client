@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FlatList, View, Modal, Text, StyleSheet } from 'react-native';
+import { FlatList, View, Modal, TouchableOpacity, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
-import TouchableOpacity from '../generic/TouchableOpacity';
+import Icon from 'react-native-vector-icons/Ionicons';
+import TouchableOpacityCustom from '../generic/TouchableOpacityCustom';
 import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
 import AudioBar from '../audio/AudioBar';
@@ -90,25 +91,37 @@ export default ({ navigation }) => {
     feedRef.current.scrollToIndex({ animated: true, index: 1 });
   };
 
+  const onNotificationsPressed = () => {
+    navigation.navigate('Notifications');
+  }
+
   return (
     <View style={{ flex: 1 }}
     >
       <View style={styles.navBar}>
-        <TextInput 
-          value={search}
-          placeholder='Try "Cornell"'
-          onChangeText={setSearch}
-        />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TextInput 
+            value={search}
+            placeholder='Try "Cornell"'
+            onChangeText={setSearch}
+            otherStyles={{ flex: 1, marginRight: 15 }}
+          />
+          <TouchableOpacity
+            onPress={() => console.log('Nothing yet')}
+          >
+            <Icon name="notifications-outline" size={25} color="rgb(127,140,141)" />
+          </TouchableOpacity>
+        </View>
         <View style={styles.navBox}>
           <View style={selected == "following" && styles.navSelected}>
-            <TouchableOpacity 
+            <TouchableOpacityCustom
               title="Following"
               selected={selected == "following"}
               onPress={() => setSelected("following")}
             />
           </View>
           <View style={selected == "trending" && styles.navSelected}>
-            <TouchableOpacity 
+            <TouchableOpacityCustom
               title="Trending"
               selected={selected == "trending"}
               onPress={() => setSelected("trending")}
