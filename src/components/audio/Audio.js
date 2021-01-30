@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AudioToggle from './AudioToggle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AudioToggle from './AudioToggle';
+import CommentsModal from '../modals/CommentsModal';
 import { setCurrentAudio } from '../../actions/audio';
 import { cast_vote } from '../../service/api/votes';
 
@@ -16,6 +17,7 @@ export const audio = ({
   id, 
   currentAudioId, 
   setCurrentAudio, 
+  setCommentsModalVisible,
   navigation 
 }) => {
   const playbackState = usePlaybackState();
@@ -81,7 +83,8 @@ export const audio = ({
   }
 
   const onCommentsPressed = () => {
-    navigation.navigate("Comments");
+    // feed modal with comments contents
+    setCommentsModalVisible(true);
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Keyboard, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
 import TouchableHighlight from '../generic/TouchableHighlight';
 
@@ -12,6 +12,7 @@ export default ({ navigation }) => {
   const [step, setStep] = useState(1);
 
   const handleRegister = () => {
+    Keyboard.dismiss();
     switch (step) {
       case 1:
         if (email != "" && password != "") {

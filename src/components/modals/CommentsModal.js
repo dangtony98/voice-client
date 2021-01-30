@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default ({ navigation }) => {
+export default ({ navigation, setCommentsModalVisible }) => {
   const onClosePressed = () => {
-    navigation.navigate("Feed");
+    setCommentsModalVisible(false);
   }
   
   return (

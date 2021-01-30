@@ -28,7 +28,7 @@ export default ({ navigation }) => {
       padding: 1,
     }}>
       <View style={{ flexGrow: 1, backgroundColor: 'rgba(52, 152, 219, 0.25)', padding: 15 }}>
-        <Text>{item.caption}</Text>
+        {/* <Text>{item.caption}</Text> */}
       </View>
     </View>
   )

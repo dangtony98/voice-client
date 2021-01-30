@@ -10,7 +10,7 @@ import AudioRecorderPlayer, {
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { post_audio } from '../../service/api/posts';
 
-export default ({ navigation }) => {  
+export default ({ navigation, setModalVisible }) => {  
   const windowWidth = Dimensions.get('window').width;
 
   // recorder state
@@ -40,11 +40,6 @@ export default ({ navigation }) => {
     AVNumberOfChannelsKeyIOS: 2,
     AVFormatIDKeyIOS: AVEncodingOption.aac,
   };
-
-  const onClosePressed = () => {
-    // clear all audio, caption etc.
-    navigation.navigate('Feed');
-  }
 
   const onStartRecord = async () => {
     const result = await audioRecorderPlayer.startRecorder();
@@ -140,7 +135,8 @@ export default ({ navigation }) => {
 
   const onHandleCancel = () => {
     onHandleReset();
-    navigation.navigate('Home');
+    setModalVisible(false);
+    navigation.navigate('Feed');
   }
 
   const onHandleDone = () => {

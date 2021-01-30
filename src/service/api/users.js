@@ -19,7 +19,6 @@ const login = async (payload, callback) => {
   .then(response => {
       AsyncStorage.setItem('userToken', response.data.token);
       AsyncStorage.setItem('user', JSON.stringify(response.data.user));
-      console.log(response.data.user);
       callback();
   })
   .catch((error) => {
@@ -27,14 +26,20 @@ const login = async (payload, callback) => {
   });
 }
 
-const get_user = async (callback) => {
-  axios.get(`${PRODUCTION_URL}/users/user`)
+const get_user = async (token, callback1, callback2) => {
+  axios.get(`${PRODUCTION_URL}/users/user`, {
+    headers: {
+      Accept: 'application/json', 
+      Authorization: token
+    }
+  })
   .then(response => {
       AsyncStorage.setItem('user', JSON.stringify(response.data));
-      callback();
+      callback1();
   })
   .catch((error) => {
       console.log('Error: ' + error);
+      callback2();
   });
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Keyboard, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
 import TouchableHighlight from '../generic/TouchableHighlight';
 
@@ -10,6 +10,7 @@ export default ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
+    Keyboard.dismiss();
     if (username != "" && password != "") {
       login({ username, password }, () => {
         navigation.navigate("Main");

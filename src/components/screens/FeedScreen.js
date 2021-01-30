@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import { FlatList, View, Modal, Text, StyleSheet } from 'react-native';
 import TextInput from '../generic/TextInput';
 import TouchableOpacity from '../generic/TouchableOpacity';
 import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
 import AudioBar from '../audio/AudioBar';
+import CommentsModal from '../modals/CommentsModal';
 import { get_feed } from '../../service/api/posts';
 import { useIsFocused } from "@react-navigation/native";
 import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
@@ -28,10 +29,11 @@ export default ({ navigation }) => {
   const [selected, setSelected] = useState("trending");
   const [skip, setSkip] = useState(0);
   const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching] = useState(false); // TO-DO: Review
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [commentsModalVisible, setCommentsModalVisible] = useState(false);
   const feedRef = useRef(null);
   const isFocused = useIsFocused();
-  // const { position, duration } = useTrackPlayerProgress(100);
+  const { position, duration } = useTrackPlayerProgress(100);
 
   // useEffect(() => {
   //   if (position && duration) {
@@ -44,7 +46,6 @@ export default ({ navigation }) => {
   useEffect(() => {
     get_feed(skip, feed => {
       setPosts(feed);
-      setSkip(prevState => prevState + feed.length);
       addTracks(feed);
     });
   }, [isFocused]);
@@ -57,13 +58,14 @@ export default ({ navigation }) => {
         caption={item.caption}
         votes={item.votes}
         comments_count={item.comments_count}
+        setCommentsModalVisible={setCommentsModalVisible}
         id={item._id}
       />
     );
   }
 
   const snapToNext = () => {
-    // TO-DO
+
   }
 
   const handleMore = () => {
@@ -75,21 +77,22 @@ export default ({ navigation }) => {
   }
 
   const onRefresh = () => {
+    setIsRefreshing(true);
     get_feed(skip, feed => {
+      setIsRefreshing(false);
       setPosts(feed)
-      setSkip(prevState => prevState + feed.length);
       TrackPlayer.reset();
       addTracks(feed);
     })
   }
 
   const goIndex = () => {
-    console.log(feedRef.current);
     feedRef.current.scrollToIndex({ animated: true, index: 1 });
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}
+    >
       <View style={styles.navBar}>
         <TextInput 
           value={search}
@@ -120,7 +123,7 @@ export default ({ navigation }) => {
         onEndReached={() => handleMore()}
         onEndReachedThreshold={0.25}
         onRefresh={() => onRefresh()}
-        refreshing={isFetching}
+        refreshing={isRefreshing}
         snapToAlignment={"start"}
         decelerationRate={"fast"}
         snapToInterval={POST_HEIGHT}
@@ -130,6 +133,16 @@ export default ({ navigation }) => {
         style={{ flexGrow: 1 }}
       />
       <AudioBar />
+      <Modal 
+        visible={commentsModalVisible} 
+        animationType="slide" 
+        style={{ flex: 1 }}
+      >
+        <CommentsModal 
+          navigation={navigation} 
+          setCommentsModalVisible={setCommentsModalVisible}
+        />
+      </Modal>
   </View>
   );
 }
