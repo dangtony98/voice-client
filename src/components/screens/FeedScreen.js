@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FlatList, View, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { FlatList, View, TouchableOpacity, StyleSheet } from 'react-native';
+import Modal from 'react-native-modal';
 import TextInput from '../generic/TextInput';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TouchableOpacityCustom from '../generic/TouchableOpacityCustom';
@@ -13,14 +14,14 @@ import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
 
 const POST_HEIGHT = 519;
 
-const addTracks = (feed) => {
+const addTracks = async (feed) => {
   const tracks = feed.map(post => ({
     id: post._id,
     url: post.audio_key,
     title: post.caption,
     artist: post.user.username
   }));
-  TrackPlayer.add(tracks).then(() => {    
+  await TrackPlayer.add(tracks).then(() => {    
 
   });
 }
@@ -36,18 +37,12 @@ export default ({ navigation }) => {
   const isFocused = useIsFocused();
   const { position, duration } = useTrackPlayerProgress(100);
 
-  // useEffect(() => {
-  //   if (position && duration) {
-  //     if (position / duration > 0.99) {
-  //       goIndex();
-  //     }
-  //   }
-  // }, [position, duration]);
-
   useEffect(() => {
-    get_feed(skip, feed => {
+    setSkip(0);
+    get_feed(0, feed => {
       setPosts(feed);
-      addTracks(feed);
+      setSkip(prevState => prevState + feed.length);
+      addTracks(feed); // fix
     });
   }, [isFocused]);
 
@@ -55,10 +50,7 @@ export default ({ navigation }) => {
     return (
       <Audio 
         navigation={navigation}
-        user={item.user}
-        caption={item.caption}
-        votes={item.votes}
-        comments_count={item.comments_count}
+        {...item}
         setCommentsModalVisible={setCommentsModalVisible}
         id={item._id}
       />
@@ -73,16 +65,17 @@ export default ({ navigation }) => {
     get_feed(skip, feed => {
       setPosts(prevState => [...prevState, ...feed]);
       setSkip(prevState => prevState + feed.length);
-      addTracks(feed);
+      addTracks(feed); // fix
     });
   }
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    get_feed(skip, feed => {
+    get_feed(0, async feed => {
       setIsRefreshing(false);
       setPosts(feed)
-      TrackPlayer.reset();
+      setSkip(prevState => prevState + feed.length);
+      await TrackPlayer.reset();
       addTracks(feed);
     })
   }
@@ -147,9 +140,10 @@ export default ({ navigation }) => {
       />
       <AudioBar />
       <Modal 
-        visible={commentsModalVisible} 
-        animationType="slide" 
-        style={{ flex: 1 }}
+        isVisible={commentsModalVisible} 
+        style={{ margin: 0, justifyContent: 'flex-end' }}
+        swipeDirection='down'
+        propagateSwipe={true}
       >
         <CommentsModal 
           navigation={navigation} 
@@ -174,3 +168,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2
   }
 });
+
+// useEffect(() => {
+//   if (position && duration) {
+//     if (position / duration > 0.99) {
+//       goIndex();
+//     }
+//   }
+// }, [position, duration]);

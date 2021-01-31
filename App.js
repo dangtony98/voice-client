@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
 import 'react-native-gesture-handler';
+import moment from 'moment';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,6 +25,26 @@ import SplashScreen from './src/components/screens/SplashScreen';
 import NotificationsScreen from './src/components/screens/NotificationsScreen';
 
 import { get_user } from './src/service/api/users';
+
+moment.updateLocale('en', {
+  relativeTime: {
+    future : 'in %s',
+    past   : '%s ago',
+    s  : function (number, withoutSuffix) {
+      return withoutSuffix ? 'now' : 'a few seconds';
+    },
+    m  : '1m',
+    mm : '%dm',
+    h  : '1h',
+    hh : '%dh',
+    d  : '1d',
+    dd : '%dd',
+    M  : '1mth',
+    MM : '%dmth',
+    y  : '1y',
+    yy : '%dy'
+  }
+});
 
 const AuthStack = createStackNavigator();
 const FeedStack = createStackNavigator();
@@ -126,8 +147,8 @@ const App: () => React$Node = () => {
             component={SplashScreen}
           />
         );
-        break;
       case false:
+        // render Login screen
         return (
           <>
             <AuthStack.Screen 
@@ -144,8 +165,6 @@ const App: () => React$Node = () => {
             />
           </>
         );
-        // render Login screen
-        break;
       case true:
         // render Main screen
         return (
@@ -154,7 +173,6 @@ const App: () => React$Node = () => {
             component={HomeTabScreen}
           />
         );
-        break;
     }
   }
 

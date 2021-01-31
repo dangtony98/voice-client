@@ -8,6 +8,7 @@ const get_feed = async (skip, callback) => {
       callback(response.data);
   })
   .catch((error) => {
+    console.log('B');
     console.log('Error: ' + error);
   });
 }

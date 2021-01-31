@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Image, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, Image, ImageBackground, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 import AudioToggle from './AudioToggle';
-import CommentsModal from '../modals/CommentsModal';
 import { setCurrentAudio } from '../../actions/audio';
 import { cast_vote } from '../../service/api/votes';
 
 export const audio = ({ 
   user, 
   caption, 
+  audio_key,
   votes, 
   comments_count, 
   id, 
   currentAudioId, 
+  createdAt,
   setCurrentAudio, 
   setCommentsModalVisible,
+  art_location,
   navigation 
 }) => {
   const playbackState = usePlaybackState();
@@ -55,7 +58,7 @@ export const audio = ({
   const onHandleVote = (vote) => {
       if (voteState == vote) {
         // case: casted vote is same as vote state
-        cast_vote({ voteType: '', postId: id }, () => {
+        cast_vote({ voteType: '', vote_on_id: id }, () => {
           setVoteState('NONE');
           vote == 'UP' 
           ? setVoteCount(voteCount - 1) 
@@ -63,7 +66,7 @@ export const audio = ({
         });
       } else {
         // case: casted vote is different from vote state
-        cast_vote({ voteType: vote.toLowerCase(), postId: id }, () => {
+        cast_vote({ voteType: vote.toLowerCase(), vote_on_id: id }, () => {
           setVoteState(vote);
           switch (voteState) {
             case 'UP':
@@ -98,14 +101,23 @@ export const audio = ({
           source={{ uri: 'https://external-preview.redd.it/_o7PutALILIg2poC9ed67vHQ68Cxx67UT6q7CFAhCs4.png?auto=webp&s=2560c01cc455c9dcbad0d869116c938060e43212' }}
           style={[styles.userImage, { marginRight: 15 }]} 
         />
-        <Text style={{ fontWeight: '500' }}>{user.username}</Text>
+        <View style={{ 
+          flexDirection: 'column', 
+          justifyContent: 'space-between', 
+        }}>
+          <Text style={{ fontWeight: '500' }}>{user.username}</Text>
+          <Text style={{ color: 'rgb(127,140,141)' }}>{moment(createdAt).fromNow(true)}</Text>
+        </View>
       </View>
-      <View style={[styles.audioImage, { alignItems: 'center' }]}>
+      <ImageBackground 
+        source={{ uri: art_location }}
+        style={[styles.audioImage, { alignItems: 'center' }]}
+      >
         <AudioToggle 
           isPlaying={playbackState == TrackPlayer.STATE_PLAYING && currentAudioId == id}
           onPress={() => togglePlay()}
         />
-      </View>
+      </ImageBackground>
       <View style={styles.bottom}>
         <View style={styles.bottomGroup}>
           <TouchableOpacity
@@ -118,7 +130,11 @@ export const audio = ({
               color={(voteState == 'UP') ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'}
             />
           </TouchableOpacity>
-          <Text style={{ marginLeft: 5, fontWeight: '500' }}>{voteCount}</Text>
+          <Text style={{ 
+            marginLeft: 5, 
+            fontWeight: '500',
+            color: voteState != 'NONE' ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'
+          }}>{voteCount}</Text>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => onHandleVote('DOWN')}
@@ -176,8 +192,7 @@ const styles = StyleSheet.create({
     height: 350,
     padding: 25,
     alignSelf: 'stretch',
-    borderRadius: 10,
-    backgroundColor: 'rgba(52, 152, 219, 0.25)'
+    borderRadius: 10
   },
   top: {
     flexDirection: 'row',

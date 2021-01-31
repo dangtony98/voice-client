@@ -3,23 +3,22 @@ import { View, Image, Text, FlatList, Dimensions, StyleSheet } from 'react-nativ
 import AudioBar from '../audio/AudioBar';
 
 const DATA = [
-  { key: 'a', caption: 'Lorem ipsum dolor sit adipiscing elit1' }, 
-  { key: 'bsa', caption: 'Lorem ipsum dolor sit adipiscing elit2' }, 
-  { key: 'cd', caption: 'Lorem ipsum dolor sit adipiscing elit3' }, 
-  { key: 'de', caption: 'Lorem ipsum dolor sit adipiscing elit4' }, 
-  { key: 'e', caption: 'Lorem ipsum dolor sit adipiscing elit5' },
-  { key: 'f', caption: 'Lorem ipsum dolor sit adipiscing elit6' },
-  { key: 'g', caption: 'Lorem ipsum dolor sit adipiscing elit7' },
-  { key: 'h', caption: 'Lorem ipsum dolor sit adipiscing elit8' }
-
+  { id: 'a', caption: 'Lorem ipsum dolor sit adipiscing elit1' }, 
+  { id: 'bsa', caption: 'Lorem ipsum dolor sit adipiscing elit2' }, 
+  { id: 'cd', caption: 'Lorem ipsum dolor sit adipiscing elit3' }, 
+  { id: 'de', caption: 'Lorem ipsum dolor sit adipiscing elit4' }, 
+  { id: 'e', caption: 'Lorem ipsum dolor sit adipiscing elit5' },
+  { id: 'f', caption: 'Lorem ipsum dolor sit adipiscing elit6' },
+  { id: 'g', caption: 'Lorem ipsum dolor sit adipiscing elit7' },
+  { id: 'h', caption: 'Lorem ipsum dolor sit adipiscing elit8' }
 ];
 
 export default ({ navigation }) => {
   const [isFetching, setIsFetching] = useState(false);
 
-  const screenWidth = Dimensions.get("window").width;
+  const windowWidth = Dimensions.get("window").width;
   const numColumns = 2;
-  const tileDimension = screenWidth / numColumns;
+  const tileDimension = windowWidth / numColumns;
 
   const renderItem = ({ item }) => (
     <View style={{ 
@@ -28,7 +27,7 @@ export default ({ navigation }) => {
       padding: 1,
     }}>
       <View style={{ flexGrow: 1, backgroundColor: 'rgba(52, 152, 219, 0.25)', padding: 15 }}>
-        {/* <Text>{item.caption}</Text> */}
+
       </View>
     </View>
   )

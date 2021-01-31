@@ -3,7 +3,7 @@ import { View, Modal, StyleSheet } from 'react-native';
 import UploadModal from '../modals/UploadModal';
 import { useIsFocused } from "@react-navigation/native";
 
-export default ({ navigation, testing }) => {
+export default ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(true);
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -13,9 +13,9 @@ export default ({ navigation, testing }) => {
   return (
     <View style={styles.screen}>
       <Modal 
-        visible={modalVisible} 
-        animationType="slide" 
-        style={{ flex: 1 }}
+        visible={modalVisible}
+        animationType="slide"
+        style={{ flex: 1, margin: 0 }}
       >
         <UploadModal 
           navigation={navigation}

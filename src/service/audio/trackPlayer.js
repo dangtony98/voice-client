@@ -8,4 +8,8 @@ module.exports = async function() {
   TrackPlayer.addEventListener('remote-stop', () => TrackPlayer.destroy());
 
   TrackPlayer.addEventListener('remote-seek', () => TrackPlayer.seekTo());
+
+  TrackPlayer.addEventListener('playback-track-changed', async (data) => {
+    await TrackPlayer.pause();
+  });
 }

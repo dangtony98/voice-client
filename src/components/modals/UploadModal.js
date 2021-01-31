@@ -21,12 +21,13 @@ export default ({ navigation, setModalVisible }) => {
   const [currentDurationSec, setCurrentDurationSec] = useState(0);
   const [playTime, setPlayTime] = useState('00:00:00');
   const [duration, setDuration] = useState('00:00:00');
-  const [audioUri, setAudioUri] = useState(null);
   const [recordState, setRecordState] = useState('NOT_STARTED');
 
   // edit state
+  const [audioUri, setAudioUri] = useState(null);
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState('');
+  const [isSharing, setIsSharing] = useState(false);
   const stepRef = useRef(null);
 
   useEffect(() => {
@@ -198,8 +199,7 @@ export default ({ navigation, setModalVisible }) => {
   };
 
   const onHandleSharePressed = () => {
-    // TO-DO: Add image upload capability once backend is done
-    if (caption != '' && recordState != 'NOT_STARTED') {
+    if (caption != '' && image != null && audioUri != null) {
         let formData = new FormData();
         formData.append('caption', caption);
         formData.append('audio_file', {
@@ -207,9 +207,14 @@ export default ({ navigation, setModalVisible }) => {
           name: 'sound.m4a',
           type: 'audio/m4a',
         });
+        formData.append('post_art', {
+          uri: image.uri,
+          name: image.fileName,
+          type: image.type
+        });
         post_audio(formData, () => {
           onHandleReset();
-          navigation.navigate('Home');
+          navigation.navigate('Feed');
         });
     }
   }

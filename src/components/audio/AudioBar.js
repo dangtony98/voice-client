@@ -20,6 +20,10 @@ export const audioBar = ({
     if (!isSeeking && position && duration) {
       setSliderValue(position / duration);
     }
+
+    if (position == duration) {
+      TrackPlayer.pause();
+    }
   }, [position, duration]);
 
   const slidingStarted = () => {
