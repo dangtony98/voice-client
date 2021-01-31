@@ -112,6 +112,7 @@ export const audio = ({
       <ImageBackground 
         source={{ uri: art_location }}
         style={[styles.audioImage, { alignItems: 'center' }]}
+        imageStyle={{ borderRadius: 10 }}
       >
         <AudioToggle 
           isPlaying={playbackState == TrackPlayer.STATE_PLAYING && currentAudioId == id}
@@ -191,8 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 350,
     padding: 25,
-    alignSelf: 'stretch',
-    borderRadius: 10
+    alignSelf: 'stretch'
   },
   top: {
     flexDirection: 'row',
