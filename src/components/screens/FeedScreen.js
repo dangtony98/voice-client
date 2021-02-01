@@ -14,18 +14,6 @@ import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
 
 const POST_HEIGHT = 519;
 
-const addTracks = async (feed) => {
-  const tracks = feed.map(post => ({
-    id: post._id,
-    url: post.audio_key,
-    title: post.caption,
-    artist: post.user.username
-  }));
-  await TrackPlayer.add(tracks).then(() => {    
-
-  });
-}
-
 export default ({ navigation }) => {
   const [search, setSearch] = useState(""); 
   const [selected, setSelected] = useState("trending");
@@ -42,7 +30,7 @@ export default ({ navigation }) => {
     get_feed(0, feed => {
       setPosts(feed);
       setSkip(prevState => prevState + feed.length);
-      addTracks(feed); // fix
+      // addTracks(feed); // fix
     });
   }, [isFocused]);
 
@@ -50,9 +38,9 @@ export default ({ navigation }) => {
     return (
       <Audio 
         navigation={navigation}
+        item={item}
         {...item}
         setCommentsModalVisible={setCommentsModalVisible}
-        id={item._id}
       />
     );
   }
@@ -65,7 +53,7 @@ export default ({ navigation }) => {
     get_feed(skip, feed => {
       setPosts(prevState => [...prevState, ...feed]);
       setSkip(prevState => prevState + feed.length);
-      addTracks(feed); // fix
+      // addTracks(feed); // fix
     });
   }
 
@@ -76,7 +64,7 @@ export default ({ navigation }) => {
       setPosts(feed)
       setSkip(prevState => prevState + feed.length);
       await TrackPlayer.reset();
-      addTracks(feed);
+      // addTracks(feed);
     })
   }
 

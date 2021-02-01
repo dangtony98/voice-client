@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, LayoutAnimation, StyleSheet } from 'react-native';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
+import { setIsPlaying } from '../../actions/audio';
 
-export const audioBar = ({ 
-  currentAudioId, 
-  currentAudioUser, 
-  currentAudioCaption
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+export const audioBar = ({
+  currentTrack,
+  isPlaying,
+  setIsPlaying
 }) => {
   const [sliderValue, setSliderValue] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -19,10 +27,6 @@ export const audioBar = ({
   useEffect(() => {
     if (!isSeeking && position && duration) {
       setSliderValue(position / duration);
-    }
-
-    if (position == duration) {
-      TrackPlayer.pause();
     }
   }, [position, duration]);
 
@@ -37,14 +41,14 @@ export const audioBar = ({
   };
 
   const togglePlay = () => {
-    if (playbackState == TrackPlayer.STATE_PAUSED) {
-      TrackPlayer.play();
+    if (!isPlaying) {
+      setIsPlaying(true);
     } else {
-      TrackPlayer.pause();
+      setIsPlaying(false);
     }
   }
 
-  return currentAudioId ? (
+  return currentTrack ? (
     <View style={styles.audioBar}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -52,8 +56,8 @@ export const audioBar = ({
             style={{ height: 30, width: 30, borderRadius: 10, backgroundColor: 'rgba(52, 152, 219, 0.25)' }} 
           />
           <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontWeight: '500' }}>{currentAudioUser}</Text>
-            <Text>{currentAudioCaption.substring(0, 40)}</Text>
+            <Text style={{ fontWeight: '500' }}>{currentTrack.artist}</Text>
+            <Text>{currentTrack.title.substring(0, 40)}</Text>
           </View>
         </View>
         <TouchableOpacity 
@@ -83,13 +87,16 @@ export const audioBar = ({
   );
 }
 
-const mapStateToProps = ({ audio}) => ({
-  currentAudioId: audio.currentAudioId,
-  currentAudioCaption: audio.currentAudioCaption,
-  currentAudioUser: audio.currentAudioUser
+const mapStateToProps = ({ audio }) => ({
+  currentTrack: audio.currentTrack,
+  isPlaying: audio.isPlaying
 });
 
-export default connect(mapStateToProps, null)(audioBar)
+const mapDispatchToProps = (dispatch) => ({
+  setIsPlaying: (isPlaying) => dispatch(setIsPlaying(isPlaying))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(audioBar)
 
 const styles = StyleSheet.create({
   audioBar: {

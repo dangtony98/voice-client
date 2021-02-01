@@ -1,4 +1,6 @@
 import TrackPlayer from 'react-native-track-player';
+import store from '../../store/store';
+import { resetPlayer } from '../../actions/audio';
 
 module.exports = async function() {
   TrackPlayer.addEventListener('remote-play', () => TrackPlayer.play());
@@ -10,6 +12,10 @@ module.exports = async function() {
   TrackPlayer.addEventListener('remote-seek', () => TrackPlayer.seekTo());
 
   TrackPlayer.addEventListener('playback-track-changed', async (data) => {
-    await TrackPlayer.pause();
+
+  });
+
+  TrackPlayer.addEventListener('playback-queue-ended', (data) => { 
+    store.dispatch(resetPlayer());
   });
 }

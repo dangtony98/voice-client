@@ -1,32 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, ImageBackground, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import AudioToggle from './AudioToggle';
-import { setCurrentAudio } from '../../actions/audio';
+import { setCurrentTrack, setIsPlaying } from '../../actions/audio';
+import { createTrack } from '../../service/audio/trackQueue';
 import { cast_vote } from '../../service/api/votes';
 
 export const audio = ({ 
+  item,
   user, 
   caption, 
-  audio_key,
   votes, 
   comments_count, 
-  id, 
-  currentAudioId, 
   createdAt,
-  setCurrentAudio, 
+  currentTrack,
+  isPlaying,
+  setCurrentTrack, 
+  setIsPlaying,
   setCommentsModalVisible,
-  art_location,
-  navigation 
+  art_location
 }) => {
-  const playbackState = usePlaybackState();
   const [voteCount, setVoteCount] = useState(votes.voteCounts);
   const [voteState, setVoteState] = useState('NONE');
-
   useEffect(() => {
     (async () => {
       const user = JSON.parse(await AsyncStorage.getItem('user'));
@@ -41,16 +39,16 @@ export const audio = ({
   }, []);
 
   const togglePlay = async () => {
-      if ((currentAudioId != id)) {
-        // case: switch tracks  
-        await TrackPlayer.skip(id);
-        await TrackPlayer.play();
-        setCurrentAudio(id, caption, user.username);
+      if (currentTrack == null || (currentTrack.id != item._id)) {
+        // case: new or different track
+        const track = createTrack(item);
+        setCurrentTrack(track);
       } else {
-        if (playbackState == TrackPlayer.STATE_PAUSED) {
-          await TrackPlayer.play();
+        // same track
+        if (!isPlaying) {
+          setIsPlaying(true);
         } else {
-          await TrackPlayer.pause();
+          setIsPlaying(false);
         }
       }
   }
@@ -58,7 +56,7 @@ export const audio = ({
   const onHandleVote = (vote) => {
       if (voteState == vote) {
         // case: casted vote is same as vote state
-        cast_vote({ voteType: '', vote_on_id: id }, () => {
+        cast_vote({ voteType: '', vote_on_id: item._id }, () => {
           setVoteState('NONE');
           vote == 'UP' 
           ? setVoteCount(voteCount - 1) 
@@ -66,7 +64,7 @@ export const audio = ({
         });
       } else {
         // case: casted vote is different from vote state
-        cast_vote({ voteType: vote.toLowerCase(), vote_on_id: id }, () => {
+        cast_vote({ voteType: vote.toLowerCase(), vote_on_id: item._id }, () => {
           setVoteState(vote);
           switch (voteState) {
             case 'UP':
@@ -115,7 +113,7 @@ export const audio = ({
         imageStyle={{ borderRadius: 10 }}
       >
         <AudioToggle 
-          isPlaying={playbackState == TrackPlayer.STATE_PLAYING && currentAudioId == id}
+          isPlaying={isPlaying && (currentTrack.id == item._id)}
           onPress={() => togglePlay()}
         />
       </ImageBackground>
@@ -166,12 +164,14 @@ export const audio = ({
   );
 }
 
-const mapStateToProps = ({ audio}) => ({
-  currentAudioId: audio.currentAudioId
+const mapStateToProps = ({ audio }) => ({
+  currentTrack: audio.currentTrack,
+  isPlaying: audio.isPlaying
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentAudio: (id, caption, user) => dispatch(setCurrentAudio(id, caption, user))
+  setCurrentTrack: (track) => dispatch(setCurrentTrack(track)),
+  setIsPlaying: (isPlaying) => dispatch(setIsPlaying(isPlaying))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(audio);
