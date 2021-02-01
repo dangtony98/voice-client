@@ -1,6 +1,7 @@
 import TrackPlayer from 'react-native-track-player';
 import store from '../../store/store';
 import { resetPlayer } from '../../actions/audio';
+import { incCurrentFeedIndex } from '../../actions/feed';
 
 module.exports = async function() {
   TrackPlayer.addEventListener('remote-play', () => TrackPlayer.play());
@@ -15,7 +16,9 @@ module.exports = async function() {
 
   });
 
-  TrackPlayer.addEventListener('playback-queue-ended', (data) => { 
-    store.dispatch(resetPlayer());
-  });
+  // TrackPlayer.addEventListener('playback-queue-ended', (data) => {
+  //   // tell redux to update index to the index of the next item in feed
+  //   store.dispatch(resetPlayer());
+  //   store.dispatch(incCurrentFeedIndex());
+  // });
 }

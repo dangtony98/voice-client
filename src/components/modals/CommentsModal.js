@@ -24,8 +24,6 @@ export default ({ navigation, setCommentsModalVisible }) => {
     return (
       <View style={styles.comment}>
         <View style={[styles.commentGroup, {     
-          borderBottomWidth: 1,
-          borderBottomColor: 'rgb(127,140,141)',
           paddingBottom: 15
         }]}>
           <Image 
@@ -39,7 +37,7 @@ export default ({ navigation, setCommentsModalVisible }) => {
               justifyContent: 'space-between',
               marginBottom: 15
             }}>
-              <Text style={{ fontWeight: '500' }}>John Doe</Text>
+              <Text style={{ fontWeight: '500' }}>johndoe</Text>
               <Text style={{ color: 'rgb(127,140,141)' }}>1s</Text>
             </View>
             <Text>{item.comment}</Text>
@@ -106,7 +104,7 @@ export default ({ navigation, setCommentsModalVisible }) => {
 
 const styles = StyleSheet.create({
   screen: {
-    height: Dimensions.get("window").height / 2,
+    height: Dimensions.get("window").height * 0.75,
     backgroundColor: 'rgb(255, 255, 255)',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10
@@ -132,8 +130,6 @@ const styles = StyleSheet.create({
   },
   commentInput: {
     padding: 15, 
-    paddingBottom: 25,
-    borderTopWidth: 1,
-    borderTopColor: 'rgb(127,140,141)'
+    paddingBottom: 25
   }
 })

@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, LayoutAnimation, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
 import { setIsPlaying } from '../../actions/audio';
-
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 export const audioBar = ({
   currentTrack,

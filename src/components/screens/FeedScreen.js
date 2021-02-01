@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import { FlatList, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import TextInput from '../generic/TextInput';
@@ -11,35 +12,54 @@ import CommentsModal from '../modals/CommentsModal';
 import { get_feed } from '../../service/api/posts';
 import { useIsFocused } from "@react-navigation/native";
 import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
+import { setFeed, paginateFeed, setCurrentFeed, setCurrentFeedIndex } from '../../actions/feed';
+import { setCurrentTrack } from '../../actions/audio';
+import { createTrack } from '../../service/audio/trackQueue';
+
+import store from '../../store/store';
+import { resetPlayer } from '../../actions/audio';
+import { incCurrentFeedIndex } from '../../actions/feed';
 
 const POST_HEIGHT = 519;
 
-export default ({ navigation }) => {
+export const feedScreen = ({ 
+  navigation,
+  feeds,
+  currentFeed,
+  setFeed,
+  paginateFeed,
+  setCurrentFeed 
+}) => {
   const [search, setSearch] = useState(""); 
-  const [selected, setSelected] = useState("trending");
-  const [skip, setSkip] = useState(0);
-  const [posts, setPosts] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [commentsModalVisible, setCommentsModalVisible] = useState(false);
   const feedRef = useRef(null);
   const isFocused = useIsFocused();
-  const { position, duration } = useTrackPlayerProgress(100);
 
   useEffect(() => {
-    setSkip(0);
-    get_feed(0, feed => {
-      setPosts(feed);
-      setSkip(prevState => prevState + feed.length);
-      // addTracks(feed); // fix
+    get_feed(0, async feedArray => {
+      setFeed(currentFeed, {
+        name: currentFeed,
+        feed: feedArray,
+        skip: feedArray.length,
+        index: 0
+      });
+      
+      TrackPlayer.addEventListener('playback-queue-ended', (data) => {
+        store.dispatch(resetPlayer());
+        store.dispatch(incCurrentFeedIndex());
+        goIndex();
+      });
     });
   }, [isFocused]);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     return (
       <Audio 
         navigation={navigation}
         item={item}
         {...item}
+        index={index}
         setCommentsModalVisible={setCommentsModalVisible}
       />
     );
@@ -50,26 +70,34 @@ export default ({ navigation }) => {
   }
 
   const handleMore = () => {
-    get_feed(skip, feed => {
-      setPosts(prevState => [...prevState, ...feed]);
-      setSkip(prevState => prevState + feed.length);
-      // addTracks(feed); // fix
+    const skip = feeds.find(feed => feed.name == currentFeed).skip;
+
+    get_feed(skip, feedArray => {
+      paginateFeed(currentFeed, feedArray, skip + feedArray.length);
     });
   }
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    get_feed(0, async feed => {
+    get_feed(0, async feedArray => {
       setIsRefreshing(false);
-      setPosts(feed)
-      setSkip(prevState => prevState + feed.length);
+      setFeed(currentFeed, {
+        name: currentFeed,
+        feed: feedArray,
+        skip: feed.length,
+        index: 0
+      });
       await TrackPlayer.reset();
-      // addTracks(feed);
     })
   }
 
   const goIndex = () => {
-    feedRef.current.scrollToIndex({ animated: true, index: 1 });
+    const index = feeds.find(feed => feed.name == currentFeed).index;
+    // const track = feeds.find(feed => feed.name == currentFeed)?.feed[index];
+    // if (track != undefined) {
+      feedRef.current.scrollToIndex({ animated: true, index: index + 1 });
+      // setCurrentTrack(createTrack(track));
+    // }
   };
 
   const onNotificationsPressed = () => {
@@ -94,24 +122,24 @@ export default ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.navBox}>
-          <View style={selected == "following" && styles.navSelected}>
+          <View style={currentFeed == "following" && styles.navSelected}>
             <TouchableOpacityCustom
               title="Following"
-              selected={selected == "following"}
-              onPress={() => setSelected("following")}
+              selected={currentFeed == "following"}
+              onPress={() => setCurrentFeed("following")}
             />
           </View>
-          <View style={selected == "trending" && styles.navSelected}>
+          <View style={currentFeed == "trending" && styles.navSelected}>
             <TouchableOpacityCustom
               title="Trending"
-              selected={selected == "trending"}
-              onPress={() => setSelected("trending")}
+              selected={currentFeed == "trending"}
+              onPress={() => setCurrentFeed("trending")}
             />
           </View>
         </View>
       </View>
       <FlatList
-        data={posts}
+        data={feeds.find(feed => feed.name == currentFeed).feed}
         renderItem={renderItem}
         keyExtractor={item => item._id}
         onEndReached={() => handleMore()}
@@ -142,6 +170,20 @@ export default ({ navigation }) => {
   );
 }
 
+const mapStateToProps = ({ feed }) => ({
+  feeds: feed.feeds,
+  currentFeed: feed.currentFeed
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setFeed: (name, feedObject) => dispatch(setFeed(name, feedObject)),
+  paginateFeed: (name, feedArray, skip) => dispatch(paginateFeed(name, feedArray, skip)),
+  setCurrentFeed: (name) => dispatch(setCurrentFeed(name)),
+  setCurrentTrack: (track) => dispatch(setCurrentTrack(track))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(feedScreen);
+
 const styles = StyleSheet.create({
   navBar: {
     paddingTop: 75,
@@ -156,11 +198,3 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2
   }
 });
-
-// useEffect(() => {
-//   if (position && duration) {
-//     if (position / duration > 0.99) {
-//       goIndex();
-//     }
-//   }
-// }, [position, duration]);

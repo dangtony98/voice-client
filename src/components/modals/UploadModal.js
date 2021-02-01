@@ -198,7 +198,7 @@ export default ({ navigation, setModalVisible }) => {
     }
   };
 
-  const onHandleSharePressed = () => {
+  const onHandleShare = () => {
     if (caption != '' && image != null && audioUri != null) {
         let formData = new FormData();
         formData.append('caption', caption);
@@ -214,6 +214,7 @@ export default ({ navigation, setModalVisible }) => {
         });
         post_audio(formData, () => {
           onHandleReset();
+          setModalVisible(false);
           navigation.navigate('Feed');
         });
     }
@@ -272,7 +273,7 @@ export default ({ navigation, setModalVisible }) => {
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => onHandleSharePressed()}
+            onPress={() => onHandleShare()}
           >
             <Text style={{ fontWeight: '500', color: 'rgb(52, 152, 219)'}}>Share</Text>
           </TouchableOpacity>

@@ -6,11 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import AudioToggle from './AudioToggle';
 import { setCurrentTrack, setIsPlaying } from '../../actions/audio';
+import { setCurrentFeedIndex } from '../../actions/feed';
 import { createTrack } from '../../service/audio/trackQueue';
 import { cast_vote } from '../../service/api/votes';
 
 export const audio = ({ 
   item,
+  index,
   user, 
   caption, 
   votes, 
@@ -20,6 +22,7 @@ export const audio = ({
   isPlaying,
   setCurrentTrack, 
   setIsPlaying,
+  setCurrentFeedIndex,
   setCommentsModalVisible,
   art_location
 }) => {
@@ -43,6 +46,7 @@ export const audio = ({
         // case: new or different track
         const track = createTrack(item);
         setCurrentTrack(track);
+        setCurrentFeedIndex(index);
       } else {
         // same track
         if (!isPlaying) {
@@ -171,7 +175,8 @@ const mapStateToProps = ({ audio }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentTrack: (track) => dispatch(setCurrentTrack(track)),
-  setIsPlaying: (isPlaying) => dispatch(setIsPlaying(isPlaying))
+  setIsPlaying: (isPlaying) => dispatch(setIsPlaying(isPlaying)),
+  setCurrentFeedIndex: (index) => dispatch(setCurrentFeedIndex(index))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(audio);
