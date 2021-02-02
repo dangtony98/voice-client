@@ -26,11 +26,14 @@ export const feedScreen = ({
   paginateFeed,
   setCurrentFeed,
 }) => {
+  // feed
   const [search, setSearch] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [commentsModalVisible, setCommentsModalVisible] = useState(false);
   const feedRef = useRef(null);
   const isFocused = useIsFocused();
+
+  // comments
+  const [commentsModalVisible, setCommentsModalVisible] = useState(false);
 
   useEffect(() => {
     get_feed(0, async (feedArray) => {
@@ -156,9 +159,14 @@ export const feedScreen = ({
         isVisible={commentsModalVisible}
         style={{margin: 0, justifyContent: 'flex-end'}}
         swipeDirection="down"
-        propagateSwipe={true}>
+        avoidKeyboard={true}
+        backdropOpacity={0.25}
+        propagateSwipe={true}
+        onBackdropPress={() => setCommentsModalVisible(false)}
+        onSwipeComplete={() => setCommentsModalVisible(false)}
+      >
         <CommentsModal
-          navigation={navigation}
+          commentsModalVisible={commentsModalVisible}
           setCommentsModalVisible={setCommentsModalVisible}
         />
       </Modal>

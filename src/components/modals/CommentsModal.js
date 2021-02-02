@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, TextInput, Image, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { get_best_comments } from '../../service/api/comments';
 
 const DATA = [
   { _id: 'aa', comment: 'Wow very valuable information. Thanks for the upload' }, 
@@ -13,8 +14,19 @@ const DATA = [
   { _id: 'ah', comment: 'FLorem ipsum dolor sit adipiscing elit8' }
 ];
 
-export default ({ navigation, setCommentsModalVisible }) => {
+export default ({ 
+  commentsModalVisible, 
+  setCommentsModalVisible 
+}) => {
   const [comment, setComment] = useState('');
+
+  useEffect(() => {
+    if (commentsModalVisible) {
+      // populate comments
+      // xyz??
+      // get_best_comments()
+    }
+  }, [commentsModalVisible]);
 
   const onClosePressed = () => {
     setCommentsModalVisible(false);
@@ -74,7 +86,7 @@ export default ({ navigation, setCommentsModalVisible }) => {
   return (
     <View style={styles.screen}>
       <View style={styles.commentsTop}>
-        <Text style={{ fontWeight: '500' }}>Comments | 6</Text>
+        <Text style={{ fontWeight: '500' }}>Comments</Text>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={onClosePressed}
