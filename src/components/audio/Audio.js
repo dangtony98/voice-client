@@ -23,7 +23,7 @@ export const audio = ({
   setCurrentTrack, 
   setIsPlaying,
   setCurrentFeedIndex,
-  setCommentsModalVisible,
+  setupCommentModal,
   art_location
 }) => {
   const [voteCount, setVoteCount] = useState(votes.voteCounts);
@@ -87,11 +87,6 @@ export const audio = ({
       }
   }
 
-  const onCommentsPressed = () => {
-    // feed modal with comments contents
-    setCommentsModalVisible(true);
-  }
-
   return (
     <View style={styles.audio} onLayout={(event) => {
       // TO-DO: remove in product; currently kept for reference
@@ -100,7 +95,7 @@ export const audio = ({
     }}>
       <View style={[styles.top, { marginBottom: 15 }]}>
         <Image 
-          source={{ uri: 'https://external-preview.redd.it/_o7PutALILIg2poC9ed67vHQ68Cxx67UT6q7CFAhCs4.png?auto=webp&s=2560c01cc455c9dcbad0d869116c938060e43212' }}
+          source={{ uri: user.img_location }}
           style={[styles.userImage, { marginRight: 15 }]} 
         />
         <View style={{ 
@@ -152,7 +147,7 @@ export const audio = ({
         </View>
         <TouchableOpacity 
           activeOpacity={0.5}
-          onPress={onCommentsPressed}
+          onPress={() => setupCommentModal(item._id)}
           style={styles.bottomGroup}
         >
           <Icon 

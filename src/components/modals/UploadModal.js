@@ -226,7 +226,7 @@ export default ({ navigation, setModalVisible }) => {
 
   return (
     <ScrollView 
-      style={{ flex: 1, backgroundColor: 'red' }}
+      style={{ flex: 1 }}
       horizontal={true}
       pagingEnabled={true}
       scrollEnabled={false}

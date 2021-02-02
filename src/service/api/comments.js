@@ -11,13 +11,27 @@ const get_best_comments = async (post_id, skip, callback) => {
     }
   })
   .then(response => {
-    console.log('get_best_comments');
-    console.log(response);
-      // callback(response.data);
+      callback(response.data);
   })
   .catch((error) => {
     console.log('Error: ' + error);
   });
 }
 
-export { get_best_comments };
+const post_comment = async (post_id, payload, callback) => {
+  const token = await AsyncStorage.getItem('userToken');
+  axios.post(`${PRODUCTION_URL}/comments/${post_id}`, payload, {
+    headers: { 
+      Accept: 'application/json', 
+      Authorization: token
+    }
+  })
+  .then(response => {
+      callback(response.data);
+  })
+  .catch((error) => {
+      console.log('Error: ' + error);
+  });
+}
+
+export { get_best_comments, post_comment };

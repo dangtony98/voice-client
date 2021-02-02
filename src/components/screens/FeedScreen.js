@@ -32,7 +32,8 @@ export const feedScreen = ({
   const feedRef = useRef(null);
   const isFocused = useIsFocused();
 
-  // comments
+  // comments - consider transfer to redux
+  const [commentsPostId, setCommentsPostId] = useState(null);
   const [commentsModalVisible, setCommentsModalVisible] = useState(false);
 
   useEffect(() => {
@@ -51,6 +52,16 @@ export const feedScreen = ({
     });
   }, []);
 
+  const setupCommentModal = (postId) => {
+    // pass postId to modal
+    // inside modal, make POST request with postId
+    // if unsuccessful -> error message
+    // if successful -> populate comments (into redux) and newsfeed mechanism but with comments inside modal
+    // on modal closed -> clear comments (from redux)
+    setCommentsPostId(postId);
+    setCommentsModalVisible(true);
+  }
+
   const goIndex = () => {
     store.dispatch(resetPlayer());
     store.dispatch(incCurrentFeedIndex());
@@ -61,18 +72,6 @@ export const feedScreen = ({
       feedRef.current.scrollToIndex({animated: true, index: index});
       store.dispatch(setCurrentTrack(createTrack(track)));
     }
-  };
-
-  const renderItem = ({item, index}) => {
-    return (
-      <Audio
-        navigation={navigation}
-        item={item}
-        {...item}
-        index={index}
-        setCommentsModalVisible={setCommentsModalVisible}
-      />
-    );
   };
 
   const handleMore = () => {
@@ -95,8 +94,16 @@ export const feedScreen = ({
     });
   };
 
-  const onNotificationsPressed = () => {
-    navigation.navigate('Notifications');
+  const renderItem = ({item, index}) => {
+    return (
+      <Audio
+        navigation={navigation}
+        item={item}
+        {...item}
+        index={index}
+        setupCommentModal={setupCommentModal}
+      />
+    );
   };
 
   return (
@@ -109,7 +116,7 @@ export const feedScreen = ({
             onChangeText={setSearch}
             otherStyles={{flex: 1, marginRight: 15}}
           />
-          <TouchableOpacity onPress={() => console.log('Nothing yet')}>
+          <TouchableOpacity onPress={() => console.log('')}>
             <Icon
               name="notifications-outline"
               size={25}
@@ -158,14 +165,13 @@ export const feedScreen = ({
       <Modal
         isVisible={commentsModalVisible}
         style={{margin: 0, justifyContent: 'flex-end'}}
-        swipeDirection="down"
-        avoidKeyboard={true}
         backdropOpacity={0.25}
         propagateSwipe={true}
         onBackdropPress={() => setCommentsModalVisible(false)}
         onSwipeComplete={() => setCommentsModalVisible(false)}
       >
         <CommentsModal
+          commentsPostId={commentsPostId}
           commentsModalVisible={commentsModalVisible}
           setCommentsModalVisible={setCommentsModalVisible}
         />

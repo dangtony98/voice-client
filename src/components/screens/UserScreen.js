@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Image, Text, FlatList, Dimensions, StyleSheet } from 'react-native';
+import { View, Image, Text, FlatList, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import AudioBar from '../audio/AudioBar';
 
 const DATA = [
@@ -14,6 +15,7 @@ const DATA = [
 ];
 
 export default ({ navigation }) => {
+  const [selected, setSelected] = useState('list');
   const [isFetching, setIsFetching] = useState(false);
 
   const windowWidth = Dimensions.get("window").width;
@@ -30,7 +32,7 @@ export default ({ navigation }) => {
 
       </View>
     </View>
-  )
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -55,22 +57,39 @@ export default ({ navigation }) => {
           <Text>Following</Text>
         </View>
       </View>
+      {/* <View style={styles.flipBar}>
+        <TouchableOpacity
+          onPress={() => setSelected('list')}
+        >
+          <Icon
+            name={selected == 'list' ? 'list' : 'list-outline'}
+            size={25}
+            color={selected == 'list' ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setSelected('grid')}
+        >
+          <Icon
+            name={selected == 'grid' ? 'grid' : 'grid-outline'}
+            size={25}
+            color={selected == 'grid' ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'}
+          />
+        </TouchableOpacity>
+      </View> */}
       <FlatList 
-          data={DATA}
-          renderItem={renderItem}
-          numColumns={3}
-          keyExtractor={item => item.id}
-          refreshing={isFetching}
-          onRefresh={() => console.log('Refresh triggered')}
-          style={{ flexGrow: 1 }}
-        />
+        data={DATA}
+        renderItem={renderItem}
+        numColumns={2}
+        keyExtractor={item => item.id}
+        refreshing={isFetching}
+        onRefresh={() => console.log('Refresh triggered')}
+        style={{ flexGrow: 1 }}
+      />
       <AudioBar />
     </View>
   );
 }
-
-
-
 
 const styles = StyleSheet.create({
   top: {
@@ -97,5 +116,13 @@ const styles = StyleSheet.create({
   infoGroup: {
     width: 100,
     alignItems: 'center'
+  },
+  flipBar: {
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: 'rgb(255, 255, 255)'
   }
 });
