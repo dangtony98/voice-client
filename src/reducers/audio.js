@@ -40,7 +40,9 @@ export default (state = current, action) => {
       };
     case SET_IS_PLAYING:
       (async () => {
-        action.isPlaying ? await TrackPlayer.play() : await TrackPlayer.pause();
+        action.isPlaying 
+        ? await TrackPlayer.play() 
+        : await TrackPlayer.pause();
       })();
       return {
         ...state,

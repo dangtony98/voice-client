@@ -1,6 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {connect} from 'react-redux';
-import {FlatList, View, TouchableOpacity, StyleSheet} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
+import store from '../../store/store';
+import { FlatList, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import TextInput from '../generic/TextInput';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -9,21 +11,10 @@ import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
 import AudioBar from '../audio/AudioBar';
 import CommentsModal from '../modals/CommentsModal';
-import {get_feed} from '../../service/api/posts';
-import {useIsFocused} from '@react-navigation/native';
-import {useTrackPlayerProgress} from 'react-native-track-player/lib/hooks';
-import {
-  setFeed,
-  paginateFeed,
-  setCurrentFeed,
-  setCurrentFeedIndex,
-} from '../../actions/feed';
-import {setCurrentTrack} from '../../actions/audio';
-import {createTrack} from '../../service/audio/trackQueue';
-
-import store from '../../store/store';
-import {resetPlayer} from '../../actions/audio';
-import {incCurrentFeedIndex} from '../../actions/feed';
+import { get_feed } from '../../service/api/posts';
+import { createTrack } from '../../service/audio/trackQueue';
+import { setFeed, paginateFeed, setCurrentFeed, incCurrentFeedIndex } from '../../actions/feed';
+import { resetPlayer, setCurrentTrack} from '../../actions/audio';
 
 const POST_HEIGHT = 519;
 
@@ -44,7 +35,6 @@ export const feedScreen = ({
   useEffect(() => {
     get_feed(0, async (feedArray) => {
       setFeed(currentFeed, {
-        name: currentFeed,
         feed: feedArray,
         skip: feedArray.length,
         index: 0,
@@ -54,18 +44,17 @@ export const feedScreen = ({
 
   useEffect(() => {
     TrackPlayer.addEventListener('playback-queue-ended', (data) => {
-      store.dispatch(resetPlayer());
-      store.dispatch(incCurrentFeedIndex());
       goIndex();
     });
   }, []);
 
   const goIndex = () => {
+    store.dispatch(resetPlayer());
+    store.dispatch(incCurrentFeedIndex());
     feeds = store.getState().feed.feeds;
-    const length = feeds.find((feed) => feed.name == currentFeed).feed.length;
-    const index = feeds.find((feed) => feed.name == currentFeed).index;
-    if (index < length) {
-      const track = feeds.find((feed) => feed.name == currentFeed)?.feed[index];
+    const { feed, index } = feeds[currentFeed];
+    if (index < feed.length) {
+      const track = feeds[currentFeed].feed[index];
       feedRef.current.scrollToIndex({animated: true, index: index});
       store.dispatch(setCurrentTrack(createTrack(track)));
     }
@@ -83,11 +72,8 @@ export const feedScreen = ({
     );
   };
 
-  const snapToNext = () => {};
-
   const handleMore = () => {
-    const skip = feeds.find((feed) => feed.name == currentFeed).skip;
-
+    const skip = feeds[currentFeed].skip;
     get_feed(skip, (feedArray) => {
       paginateFeed(currentFeed, feedArray, skip + feedArray.length);
     });
@@ -98,7 +84,6 @@ export const feedScreen = ({
     get_feed(0, async (feedArray) => {
       setIsRefreshing(false);
       setFeed(currentFeed, {
-        name: currentFeed,
         feed: feedArray,
         skip: feed.length,
         index: 0,
@@ -147,7 +132,7 @@ export const feedScreen = ({
         </View>
       </View>
       <FlatList
-        data={feeds.find((feed) => feed.name == currentFeed).feed}
+        data={feeds[currentFeed].feed}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         onEndReached={() => handleMore()}
@@ -188,8 +173,7 @@ const mapStateToProps = ({feed}) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setFeed: (name, feedObject) => dispatch(setFeed(name, feedObject)),
-  paginateFeed: (name, feedArray, skip) =>
-    dispatch(paginateFeed(name, feedArray, skip)),
+  paginateFeed: (name, feedArray, skip) => dispatch(paginateFeed(name, feedArray, skip)),
   setCurrentFeed: (name) => dispatch(setCurrentFeed(name)),
   setCurrentTrack: (track) => dispatch(setCurrentTrack(track)),
 });

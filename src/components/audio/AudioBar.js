@@ -57,7 +57,7 @@ export const audioBar = ({
           activeOpacity={0.5}
           onPress={togglePlay}
         >
-          {(playbackState == TrackPlayer.STATE_PLAYING) ? (
+          {isPlaying ? (
             <Icon name="pause" size={25} color="rgb(52, 152, 219)" />
           ) : (
             <Icon name="play" size={25} color="rgb(52, 152, 219)" />

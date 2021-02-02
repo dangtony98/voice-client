@@ -7,44 +7,42 @@ import {
 } from '../actions/constants';
 
 const current = {
-  feeds: [
-    {
-      name: 'following',
+  feeds: {
+    following: {
       feed: [],
       skip: 0,
-      index: 0,
+      index: 0
     },
-    {
-      name: 'trending',
+    trending: {
       feed: [],
       skip: 0,
-      index: 0,
-    },
-  ],
+      index: 0
+    }
+  },
   currentFeed: 'trending',
-};
+}
 
 export default (state = current, action) => {
   switch (action.type) {
     case SET_FEED:
       return {
         ...state,
-        feeds: state.feeds.map((feedItem) =>
-          feedItem.name == action.name ? action.feedObject : feedItem,
-        ),
+        feeds: {
+          ...state.feeds,
+          [action.name]: action.feedObject
+        }
       };
     case PAGINATE_FEED:
       return {
         ...state,
-        feeds: state.feeds.map((feedItem) =>
-          feedItem.name == action.name
-            ? {
-                ...feedItem,
-                feed: [...feedItem.feed, ...action.feedArray],
-                skip: action.skip,
-              }
-            : feedItem,
-        ),
+        feeds: {
+          ...state.feeds,
+          [action.name]: {
+            ...state.feeds[action.name],
+            feed: [...feeds[action.name].feed, action.feedArray],
+            skip: action.skip
+          }
+        }
       };
     case SET_CURRENT_FEED:
       return {
@@ -54,20 +52,24 @@ export default (state = current, action) => {
     case SET_CURRENT_FEED_INDEX:
       return {
         ...state,
-        feeds: state.feeds.map((feedItem) =>
-          feedItem.name == state.currentFeed
-            ? {...feedItem, index: action.index}
-            : feedItem,
-        ),
+        feeds: {
+          ...state.feeds,
+          [state.currentFeed]: {
+            ...state.feeds[state.currentFeed],
+            index: action.index
+          }
+        }
       };
     case INC_CURRENT_FEED_INDEX:
       return {
         ...state,
-        feeds: state.feeds.map((feedItem) =>
-          feedItem.name == state.currentFeed
-            ? {...feedItem, index: feedItem.index + 1}
-            : feedItem,
-        ),
+        feeds: {
+          ...state.feeds,
+          [state.currentFeed]: {
+            ...state.feeds[state.currentFeed],
+            index: state.feeds[state.currentFeed].index + 1
+          }
+        }
       };
     default:
       return state;
