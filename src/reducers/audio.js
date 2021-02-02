@@ -1,19 +1,19 @@
-import { 
+import {
   RESET_PLAYER,
-  SET_CURRENT_TRACK, 
+  SET_CURRENT_TRACK,
   SET_IS_PLAYING,
-  CLEAR_QUEUE,  
+  CLEAR_QUEUE,
   ENQUEUE,
-  DEQUEUE
+  DEQUEUE,
 } from '../actions/constants';
 
 import TrackPlayer from 'react-native-track-player';
 
-const current = {  
+const current = {
   queue: [],
   currentTrack: null,
-  isPlaying: false
-}
+  isPlaying: false,
+};
 
 export default (state = current, action) => {
   switch (action.type) {
@@ -25,8 +25,8 @@ export default (state = current, action) => {
         ...this.state,
         queue: [],
         currentTrack: null,
-        isPlaying: false
-      }
+        isPlaying: false,
+      };
     case SET_CURRENT_TRACK:
       (async () => {
         await TrackPlayer.reset();
@@ -36,34 +36,32 @@ export default (state = current, action) => {
       return {
         ...state,
         currentTrack: action.track,
-        isPlaying: true
-      }
+        isPlaying: true,
+      };
     case SET_IS_PLAYING:
       (async () => {
-        action.isPlaying 
-        ? await TrackPlayer.play() 
-        : await TrackPlayer.pause();
+        action.isPlaying ? await TrackPlayer.play() : await TrackPlayer.pause();
       })();
       return {
         ...state,
-        isPlaying: action.isPlaying
-      }
+        isPlaying: action.isPlaying,
+      };
     case CLEAR_QUEUE:
       return {
         ...state,
-        queue: []
-      }
+        queue: [],
+      };
     case ENQUEUE:
       return {
         ...state,
-        queue: [...state.queue, action.track]
-      }
+        queue: [...state.queue, action.track],
+      };
     case DEQUEUE:
       return {
         ...state,
-        queue: state.queue.slice(0, -1)
-      }
+        queue: state.queue.slice(0, -1),
+      };
     default:
-      return state
+      return state;
   }
-}
+};

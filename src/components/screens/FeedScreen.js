@@ -49,14 +49,16 @@ export const feedScreen = ({
         skip: feedArray.length,
         index: 0,
       });
-
-      TrackPlayer.addEventListener('playback-queue-ended', (data) => {
-        store.dispatch(resetPlayer());
-        store.dispatch(incCurrentFeedIndex());
-        goIndex();
-      });
     });
   }, [isFocused]);
+
+  useEffect(() => {
+    TrackPlayer.addEventListener('playback-queue-ended', (data) => {
+      store.dispatch(resetPlayer());
+      store.dispatch(incCurrentFeedIndex());
+      goIndex();
+    });
+  }, []);
 
   const goIndex = () => {
     feeds = store.getState().feed.feeds;
