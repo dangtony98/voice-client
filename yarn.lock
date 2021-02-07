@@ -5736,6 +5736,11 @@
   dependencies:
     "dooboolab-welcome" "^1.2.0"
 
+"react-native-flags@^1.0.0":
+  "integrity" "sha1-i/mbWOElymBX15I1SRMrNXl1TtM="
+  "resolved" "https://registry.npmjs.org/react-native-flags/-/react-native-flags-1.0.0.tgz"
+  "version" "1.0.0"
+
 "react-native-fs@^2.16.6":
   "integrity" "sha512-ZWOooD1AuFoAGY3HS2GY7Qx2LZo4oIg6AK0wbC68detxwvX75R/q9lRqThXNKP6vIo2VHWa0fYUo/SrLw80E8w=="
   "resolved" "https://registry.npmjs.org/react-native-fs/-/react-native-fs-2.16.6.tgz"

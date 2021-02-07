@@ -159,8 +159,7 @@ export const feedScreen = ({
       <AudioBar />
       <Modal
         isVisible={commentsModalVisible}
-        style={{margin: 0 }}
-        backdropOpacity={0.25}
+        style={{ margin: 0 }}
         propagateSwipe={true}
         onBackdropPress={() => setCommentsModalVisible(false)}
         onSwipeComplete={() => setCommentsModalVisible(false)}

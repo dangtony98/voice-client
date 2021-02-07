@@ -184,11 +184,11 @@ const App: () => React$Node = () => {
           <AuthStack.Navigator 
             screenOptions={{ headerShown: false }}
           >
-            {renderScreen(validToken)}
-            {/* <AuthStack.Screen
+            {/* {renderScreen(validToken)} */}
+            <AuthStack.Screen
               name="Reg2"
               component={RegisterScreenAlt}
-            /> */}
+            />
           </AuthStack.Navigator>
         </NavigationContainer>
       </Provider>

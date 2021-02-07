@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-
 import RegisterNumber from '../register/RegisterNumber';
 import RegisterOTP from '../register/RegisterOTP';
 

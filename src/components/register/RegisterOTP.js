@@ -5,10 +5,10 @@ export default () => {
   return (
     <View 
       style={{ 
-        width: Dimensions.get('window').width 
+        width: Dimensions.get('window').width
       }}
     >
-      <Text>OTP Step</Text>
+
     </View>
   );
 }
