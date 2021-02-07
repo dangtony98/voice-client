@@ -8,6 +8,7 @@ import AudioToggle from './AudioToggle';
 import { setCurrentTrack, setIsPlaying } from '../../actions/audio';
 import { setCurrentFeedIndex } from '../../actions/feed';
 import { createTrack } from '../../service/audio/trackQueue';
+import { initVoteState, handleVote } from '../../service/votes/votes';
 import { cast_vote } from '../../service/api/votes';
 
 export const audio = ({ 
@@ -29,16 +30,7 @@ export const audio = ({
   const [voteCount, setVoteCount] = useState(votes.voteCounts);
   const [voteState, setVoteState] = useState('NONE');
   useEffect(() => {
-    (async () => {
-      const user = JSON.parse(await AsyncStorage.getItem('user'));
-      if (votes.downvoters.includes(user._id)) {
-        setVoteState('DOWN');
-      }
-      
-      if (votes.upvoters.includes(user._id)) {
-        setVoteState('UP');
-      }
-    })();
+    initVoteState(item, setVoteState);
   }, []);
 
   const togglePlay = async () => {
@@ -54,36 +46,6 @@ export const audio = ({
         } else {
           setIsPlaying(false);
         }
-      }
-  }
-
-  const onHandleVote = (vote) => {
-      if (voteState == vote) {
-        // case: casted vote is same as vote state
-        cast_vote({ voteType: '', vote_on_id: item._id }, () => {
-          setVoteState('NONE');
-          vote == 'UP' 
-          ? setVoteCount(voteCount - 1) 
-          : setVoteCount(voteCount + 1);
-        });
-      } else {
-        // case: casted vote is different from vote state
-        cast_vote({ voteType: vote.toLowerCase(), vote_on_id: item._id }, () => {
-          setVoteState(vote);
-          switch (voteState) {
-            case 'UP':
-              setVoteCount(voteCount - 2);
-              break;
-            case 'DOWN':
-              setVoteCount(voteCount + 2);
-              break;
-            case 'NONE':
-              vote == 'UP' 
-              ? setVoteCount(voteCount + 1) 
-              : setVoteCount(voteCount - 1);
-              break;
-          }
-        });
       }
   }
 
@@ -120,7 +82,7 @@ export const audio = ({
         <View style={styles.bottomGroup}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => onHandleVote('UP')}
+            onPress={() => handleVote(item, voteState, voteCount, 'UP', setVoteState, setVoteCount)}
           >
             <Icon 
               name="arrow-up" 
@@ -135,7 +97,7 @@ export const audio = ({
           }}>{voteCount}</Text>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => onHandleVote('DOWN')}
+            onPress={() => handleVote(item, voteState, voteCount, 'DOWN', setVoteState, setVoteCount)}
           >
             <Icon 
               name="arrow-down" 
@@ -147,7 +109,7 @@ export const audio = ({
         </View>
         <TouchableOpacity 
           activeOpacity={0.5}
-          onPress={() => setupCommentModal(item._id)}
+          onPress={() => setupCommentModal(item)}
           style={styles.bottomGroup}
         >
           <Icon 

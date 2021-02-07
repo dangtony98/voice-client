@@ -2,8 +2,14 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL } from '../constants';
 
-const getFeed = async (skip, callback) => {
-  axios.get(`${URL}/posts/trending-posts?skip=${skip}`)
+const getReplies = async (comment_id, skip, callback) => {
+  const token = await AsyncStorage.getItem('userToken');
+  axios.get(`${URL}/replies/${comment_id}?skip=${skip}`, {
+    headers: {
+      Accept: 'application/json', 
+      Authorization: token
+    }
+  })
   .then(response => {
       callback(response.data);
   })
@@ -12,37 +18,20 @@ const getFeed = async (skip, callback) => {
   });
 }
 
-const getAudio = async (audio_key, callback) => {
+const postReply = async (comment_id, payload, callback) => {
   const token = await AsyncStorage.getItem('userToken');
-  axios.get(`${URL}/posts/audio/${audio_key}`,
-  {
-    headers: {
-      Accept: 'application/json', 
-      Authorization: token
-    }
-  })
-  .then(response => {
-    callback(response.data.audio_location);
-  })
-  .catch((error) => {
-    console.log('Error: ' + error);
-  });
-}
-
-const postAudio = async (payload, callback) => {
-  const token = await AsyncStorage.getItem('userToken');
-  axios.post(`${URL}/posts/new`, payload, {
+  axios.post(`${URL}/replies/new/${comment_id}`, payload, {
     headers: { 
       Accept: 'application/json', 
       Authorization: token
     }
   })
   .then(response => {
-      callback();
+      callback(response.data);
   })
   .catch((error) => {
       console.log('Error: ' + error);
   });
 }
 
-export { getFeed, getAudio, postAudio };
+export { getReplies, postReply };

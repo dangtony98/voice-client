@@ -1,10 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEVELOPMENT_URL, PRODUCTION_URL } from '../constants';
+import { URL } from '../constants';
 
-const cast_vote = async (payload, callback) => {
+const castVote = async (payload, callback) => {
   const token = await AsyncStorage.getItem('userToken');
-  axios.post(`${PRODUCTION_URL}/votes`, payload, {
+  axios.post(`${URL}/votes`, payload, {
     headers: { 
       Accept: 'application/json', 
       Authorization: token
@@ -18,4 +18,4 @@ const cast_vote = async (payload, callback) => {
   });
 }
 
-export { cast_vote };
+export { castVote };

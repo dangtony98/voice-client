@@ -8,7 +8,7 @@ import AudioRecorderPlayer, {
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { post_audio } from '../../service/api/posts';
+import { postAudio } from '../../service/api/posts';
 
 export default ({ navigation, setModalVisible }) => {  
   const windowWidth = Dimensions.get('window').width;
@@ -212,7 +212,7 @@ export default ({ navigation, setModalVisible }) => {
           name: image.fileName,
           type: image.type
         });
-        post_audio(formData, () => {
+        postAudio(formData, () => {
           onHandleReset();
           setModalVisible(false);
           navigation.navigate('Feed');

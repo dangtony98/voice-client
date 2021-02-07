@@ -1,9 +1,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEVELOPMENT_URL, PRODUCTION_URL } from '../constants';
+import { URL } from '../constants';
 
 const register = async (payload, callback) => {
-  axios.post(`${PRODUCTION_URL}/users/register`, payload)
+  axios.post(`${URL}/users/register`, payload)
   .then(response => {
       AsyncStorage.setItem('userToken', response.data.token);
       AsyncStorage.setItem('user', response.data.user);
@@ -15,7 +15,7 @@ const register = async (payload, callback) => {
 }
 
 const login = async (payload, callback) => {
-  axios.post(`${PRODUCTION_URL}/users/login`, payload)
+  axios.post(`${URL}/users/login`, payload)
   .then(response => {
       AsyncStorage.setItem('userToken', response.data.token);
       AsyncStorage.setItem('user', JSON.stringify(response.data.user));
@@ -26,8 +26,8 @@ const login = async (payload, callback) => {
   });
 }
 
-const get_user = async (token, callback1, callback2) => {
-  axios.get(`${PRODUCTION_URL}/users/user`, {
+const getUser = async (token, callback1, callback2) => {
+  axios.get(`${URL}/users/user`, {
     headers: {
       Accept: 'application/json', 
       Authorization: token
@@ -43,4 +43,4 @@ const get_user = async (token, callback1, callback2) => {
   });
 }
 
-export { register, login, get_user };
+export { register, login, getUser };

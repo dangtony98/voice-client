@@ -11,12 +11,12 @@ import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
 import AudioBar from '../audio/AudioBar';
 import CommentsModal from '../modals/CommentsModal';
-import { get_feed } from '../../service/api/posts';
+import { getFeed } from '../../service/api/posts';
 import { createTrack } from '../../service/audio/trackQueue';
 import { setFeed, paginateFeed, setCurrentFeed, incCurrentFeedIndex } from '../../actions/feed';
 import { resetPlayer, setCurrentTrack} from '../../actions/audio';
 
-const POST_HEIGHT = 519;
+const POST_HEIGHT = 523;
 
 export const feedScreen = ({
   navigation,
@@ -32,12 +32,12 @@ export const feedScreen = ({
   const feedRef = useRef(null);
   const isFocused = useIsFocused();
 
-  // comments - consider transfer to redux
-  const [commentsPostId, setCommentsPostId] = useState(null);
+  // comments
+  const [commentsPost, setCommentsPost] = useState(null);
   const [commentsModalVisible, setCommentsModalVisible] = useState(false);
 
   useEffect(() => {
-    get_feed(0, async (feedArray) => {
+    getFeed(0, async (feedArray) => {
       setFeed(currentFeed, {
         feed: feedArray,
         skip: feedArray.length,
@@ -52,13 +52,8 @@ export const feedScreen = ({
     });
   }, []);
 
-  const setupCommentModal = (postId) => {
-    // pass postId to modal
-    // inside modal, make POST request with postId
-    // if unsuccessful -> error message
-    // if successful -> populate comments (into redux) and newsfeed mechanism but with comments inside modal
-    // on modal closed -> clear comments (from redux)
-    setCommentsPostId(postId);
+  const setupCommentModal = (post) => {
+    setCommentsPost(post);
     setCommentsModalVisible(true);
   }
 
@@ -76,14 +71,14 @@ export const feedScreen = ({
 
   const handleMore = () => {
     const skip = feeds[currentFeed].skip;
-    get_feed(skip, (feedArray) => {
+    getFeed(skip, (feedArray) => {
       paginateFeed(currentFeed, feedArray, skip + feedArray.length);
     });
   };
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    get_feed(0, async (feedArray) => {
+    getFeed(0, async (feedArray) => {
       setIsRefreshing(false);
       setFeed(currentFeed, {
         feed: feedArray,
@@ -164,14 +159,14 @@ export const feedScreen = ({
       <AudioBar />
       <Modal
         isVisible={commentsModalVisible}
-        style={{margin: 0, justifyContent: 'flex-end'}}
+        style={{margin: 0 }}
         backdropOpacity={0.25}
         propagateSwipe={true}
         onBackdropPress={() => setCommentsModalVisible(false)}
         onSwipeComplete={() => setCommentsModalVisible(false)}
       >
         <CommentsModal
-          commentsPostId={commentsPostId}
+          commentsPost={commentsPost}
           commentsModalVisible={commentsModalVisible}
           setCommentsModalVisible={setCommentsModalVisible}
         />

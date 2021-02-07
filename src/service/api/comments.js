@@ -1,10 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEVELOPMENT_URL, PRODUCTION_URL } from '../constants';
+import { URL } from '../constants';
 
-const get_best_comments = async (post_id, skip, callback) => {
+const getBestComments = async (post_id, skip, callback) => {
   const token = await AsyncStorage.getItem('userToken');
-  axios.get(`${PRODUCTION_URL}/comments/sort/best/${post_id}?skip=${skip}`, {
+  axios.get(`${URL}/comments/sort/best/${post_id}?skip=${skip}`, {
     headers: {
       Accept: 'application/json', 
       Authorization: token
@@ -18,9 +18,9 @@ const get_best_comments = async (post_id, skip, callback) => {
   });
 }
 
-const post_comment = async (post_id, payload, callback) => {
+const postComment = async (post_id, payload, callback) => {
   const token = await AsyncStorage.getItem('userToken');
-  axios.post(`${PRODUCTION_URL}/comments/${post_id}`, payload, {
+  axios.post(`${URL}/comments/${post_id}`, payload, {
     headers: { 
       Accept: 'application/json', 
       Authorization: token
@@ -34,4 +34,4 @@ const post_comment = async (post_id, payload, callback) => {
   });
 }
 
-export { get_best_comments, post_comment };
+export { getBestComments, postComment };

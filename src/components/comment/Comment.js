@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
   Image,
@@ -10,7 +11,15 @@ import {
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { initVoteState, handleVote } from '../../service/votes/votes';
+
 export default ({ item, handleScroll }) => {
+  const [voteCount, setVoteCount] = useState(item.votes.voteCounts);
+  const [voteState, setVoteState] = useState('NONE');
+
+  useEffect(() => {
+    initVoteState(item, setVoteState);
+  }, []);
 
   return (
     <View style={styles.comment}>
@@ -27,37 +36,43 @@ export default ({ item, handleScroll }) => {
             height: 30,
             marginBottom: 15
           }}>
-            <Text style={{ fontWeight: '500' }}>{item.user.username}</Text>
-            <Text style={{ color: 'rgb(127,140,141)' }}>{moment(item.createdAt).fromNow(true)}</Text>
+            <Text style={{ fontWeight: '500' }}>
+              {item.user.username}
+            </Text>
+            <Text style={{ color: 'rgb(127,140,141)' }}>
+              {moment(item.createdAt).fromNow(true)}
+            </Text>
           </View>
           <Text>{item.body}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 15 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => console.log('Unfinished')}
-              >
+                onPress={() => handleVote(item, voteState, voteCount, 'UP', setVoteState, setVoteCount)}
+                >
                 <Icon 
                   name="arrow-up" 
                   size={20} 
-                  color={'rgb(127,140,141)'}
+                  color={(voteState == 'UP') ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'}
                 />
               </TouchableOpacity>
-              <Text style={{ marginLeft: 5, fontWeight: '500' }}>{item.votes.voteCounts}</Text>
+              <Text style={{ marginLeft: 5, fontWeight: '500' }}>
+                {voteCount}
+              </Text>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => console.log('Unfinished')}
+                onPress={() => handleVote(item, voteState, voteCount, 'DOWN', setVoteState, setVoteCount)}
               >
                 <Icon 
                   name="arrow-down" 
                   size={20} 
-                  color={'rgb(127,140,141)'}
+                  color={(voteState == 'DOWN') ? 'rgb(52, 152, 219)' : 'rgb(127,140,141)'}
                   style={{ marginLeft: 5 }} 
                 />
               </TouchableOpacity>
             </View>
             <TouchableOpacity
-              onPress={() => handleScroll(Dimensions.get('window').width)}
+              onPress={() => handleScroll(item, Dimensions.get('window').width)}
               style={{ flexDirection: 'row', alignItems: 'center' }}
             > 
               <Icon 
@@ -66,7 +81,9 @@ export default ({ item, handleScroll }) => {
                 color={'rgb(127,140,141)'}
                 style={{ marginLeft: 5 }} 
               />
-              <Text style={{ marginLeft: 5, fontWeight: '500' }}>{item.repliesCount}</Text>
+              <Text style={{ marginLeft: 5, fontWeight: '500' }}>
+                {item.repliesCount}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

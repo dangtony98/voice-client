@@ -23,8 +23,9 @@ import UploadScreen from './src/components/screens/UploadScreen';
 import UserScreen from './src/components/screens/UserScreen';
 import SplashScreen from './src/components/screens/SplashScreen';
 import NotificationsScreen from './src/components/screens/NotificationsScreen';
+import { getUser } from './src/service/api/users';
 
-import { get_user } from './src/service/api/users';
+import RegisterScreenAlt from './src/components/screens/RegisterScreenAlt';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -120,7 +121,7 @@ const App: () => React$Node = () => {
       try {
         // case: try restore token from AsyncStorage
         userToken = await AsyncStorage.getItem('userToken');
-        get_user(userToken,
+        getUser(userToken,
           () => {
             // case: valid token
             setValidToken(true);
@@ -184,6 +185,10 @@ const App: () => React$Node = () => {
             screenOptions={{ headerShown: false }}
           >
             {renderScreen(validToken)}
+            {/* <AuthStack.Screen
+              name="Reg2"
+              component={RegisterScreenAlt}
+            /> */}
           </AuthStack.Navigator>
         </NavigationContainer>
       </Provider>
