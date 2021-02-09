@@ -25,6 +25,7 @@ import { getUser } from './src/service/api/users';
 
 import RegisterScreenAlt from './src/components/screens/RegisterScreenAlt';
 import LoginScreenAlt from './src/components/screens/LoginScreenAlt';
+import WelcomeScreen from './src/components/screens/WelcomeScreen';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -152,6 +153,10 @@ const App: () => React$Node = () => {
         // render Login screen
         return (
           <>
+            <AuthStack.Screen 
+              name="Welcome"
+              component={WelcomeScreen}
+            />
             <AuthStack.Screen 
               name="Login" 
               component={LoginScreenAlt} 

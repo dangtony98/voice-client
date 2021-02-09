@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Image, ImageBackground, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { 
+  View, 
+  Image, 
+  Text, 
+  ImageBackground, 
+  TouchableOpacity,
+  StyleSheet 
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import AudioToggle from './AudioToggle';
 import { setCurrentTrack, setIsPlaying } from '../../actions/audio';

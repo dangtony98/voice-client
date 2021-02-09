@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { View, ScrollView, Dimensions, StyleSheet } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, ScrollView, Dimensions, Keyboard, StyleSheet } from 'react-native';
 import AuthNumber from '../authentication/AuthNumber';
 import AuthOTP from '../authentication/AuthOTP';
 
@@ -22,6 +22,10 @@ export default ({
   const [authNumberError, setAuthNumberError] = useState('');
   const [authOTPError, setAuthOTPError] = useState('');
 
+  useEffect(() => {
+    Keyboard.dismiss();
+  }, []);
+
   const handleScroll = (x) => {
     stepRef.current.scrollTo({x, y: 0, animated: true})
   };
@@ -30,6 +34,7 @@ export default ({
     // TO-DO: navigate to root login/register
     setDialCode('');
     setPhoneNumber('');
+    navigation.navigate('Welcome');
   }
 
   const onAuthNumberNext = (dialCode, phoneNumber) => {

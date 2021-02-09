@@ -3,9 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 export default () => {
   return (
-    <View style={styles.screen}>
-      <Text style={styles.logo}>Voice</Text>
-    </View>
+    <View style={styles.screen} />
   );
 }
 
@@ -19,6 +17,6 @@ const styles = StyleSheet.create({
   logo: {
     fontWeight: '500',
     color: 'rgb(255, 255, 255)',
-    fontSize: 40
+    fontSize: 50
   }
 });

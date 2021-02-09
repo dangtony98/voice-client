@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { View, ScrollView, Dimensions, StyleSheet } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, ScrollView, Dimensions, Keyboard, StyleSheet } from 'react-native';
 import AuthNumber from '../authentication/AuthNumber';
 import AuthOTP from '../authentication/AuthOTP';
 import AuthUser from '../authentication/AuthUser';
@@ -34,6 +34,7 @@ export default ({
     // TO-DO: navigate to root login/register
     setDialCode('');
     setPhoneNumber('');
+    navigation.navigate('Welcome');
   }
 
   const onAuthNumberNext = (dialCode, phoneNumber) => {
