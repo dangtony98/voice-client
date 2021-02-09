@@ -9,12 +9,16 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 
-export default () => {
-
-  const verifyCode = (code) => {
-    console.log(`verifyCode() with code ${code}`);
-  }
-
+export default ({
+  heading,
+  description,
+  onAuthOTPBack,
+  onAuthOTPNext,
+  onAuthOTPResend,
+  OTPCode,
+  setOTPCode,
+  authOTPError
+}) => {
   return (
     <View style={{ 
         flex: 1,
@@ -24,7 +28,7 @@ export default () => {
       <View style={styles.navBar}>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => console.log('Nothing yet')}
+          onPress={() => onAuthOTPBack()}
         >
           <Icon 
             name="chevron-back-outline" 
@@ -36,25 +40,32 @@ export default () => {
       <View style={{ paddingTop: 100, paddingHorizontal: 25 }}>
         <View style={{ height: 125 }}>
           <Text style={[styles.header, { marginBottom: 15 }]}>
-            Enter verification code
+            {heading}
           </Text>
           <Text style={{ color: 'rgb(255, 255, 255)' }}>
-            Please type the verification code sent to +1******2985
+            {description}
           </Text>
         </View>
       </View>
-      <View style={{ paddingHorizontal: 25 }}>
+      <View style={{ paddingHorizontal: 25, marginBottom: 25 }}>
         <OTPInputView 
           style={styles.OTP}
           codeInputFieldStyle={styles.OTPCell}
           pinCount={6} 
-          onCodeFilled = {(code => handleCodeVerification(code))}
+          code={OTPCode}
+          onCodeChanged = {code => setOTPCode(code)}
+          onCodeFilled = {(code => onAuthOTPNext(code))}
         />
       </View>
-      <View style={{ marginTop: 75, alignItems: 'center' }}>
+      <View style={{ paddingHorizontal: 25, height: 50 }}>
+        <Text style={{ color: 'rgb(255, 255, 255)' }}>
+          {authOTPError}
+        </Text>
+      </View>
+      <View style={{ marginTop: 25, alignItems: 'center' }}>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => console.log('Nothing yet')}
+          onPress={() => onAuthOTPResend()}
         >
           <Text style={{ 
               fontWeight: '500',

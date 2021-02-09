@@ -7,26 +7,24 @@ import {
   Dimensions,
   StyleSheet 
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
-export default () => {
+export default ({
+  onAuthUserNext,
+  authUserError
+}) => {
   const [username, setUsername] = useState('');
-
-  const verifyUsername = () => {
-    console.log(`verifyUsername() with username ${username}`);
-  }
-
+  console.log('authusererror');
+  console.log(authUserError);
   return (
     <View style={{
         flex: 1,
         width: Dimensions.get('window').width
-      }}
-    >
+    }}>
       <View style={styles.navBar}>
         <View />
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => verifyUsername()}
+          onPress={() => onAuthUserNext(username)}
         >
           <Text style={{ 
               fontWeight: '500',
@@ -51,8 +49,11 @@ export default () => {
           value={username}
           onChangeText={text => setUsername(text)}
           placeholder="flyingdog"
-          style={styles.usernameInput}
+          style={[styles.usernameInput, { marginBottom: 25 }]}
         />
+        <Text style={{ color: 'rgb(255, 255, 255)' }}>
+          {authUserError}
+        </Text>
       </View>
     </View>
   );

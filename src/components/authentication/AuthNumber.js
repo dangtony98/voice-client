@@ -16,7 +16,13 @@ import { Picker } from '@react-native-picker/picker';
 import countryValues from '../../service/static/countryValues.json';
 import countryCodes from '../../service/static/countryCodes.json';
 
-export default () => {
+export default ({
+  heading,
+  description,
+  onAuthNumberBack,
+  onAuthNumberNext,
+  authNumberError
+}) => {
   const [dialCode, setDialCode] = useState('1');
   const [showPicker, setShowPicker] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -24,10 +30,6 @@ export default () => {
   const onCountryCode = () => {
     Keyboard.dismiss();
     setShowPicker(prevState => !prevState);
-  }
-
-  const verifyPhoneNumber = () => {
-    console.log(`verifyPhoneNumber() with number ${phoneNumber}`);
   }
 
   return (
@@ -40,7 +42,7 @@ export default () => {
         <View style={styles.navBar}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => console.log('Nothing yet')}
+            onPress={() => onAuthNumberBack()}
           >
             <Icon 
               name="chevron-back-outline" 
@@ -50,7 +52,7 @@ export default () => {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => verifyPhoneNumber()}
+            onPress={() => onAuthNumberNext(dialCode, phoneNumber)}
           >
             <Text style={{ 
                 fontWeight: '500',
@@ -64,14 +66,13 @@ export default () => {
         <View style={{ paddingTop: 100, paddingHorizontal: 25 }}>
           <View style={{ height: 125 }}>
             <Text style={[styles.header, { marginBottom: 15 }]}>
-              Enter mobile number
+              {heading}
             </Text>
             <Text style={{ color: 'rgb(255, 255, 255)' }}>
-              By entering your number, you're agreeing to our Terms of Service
-              and Privacy Policy
+              {description}
             </Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', marginBottom: 25 }}>
             <TouchableOpacity
               onPress={() => onCountryCode()}
               style={[styles.countryCodeButton, { marginRight: 15 }]}
@@ -90,11 +91,14 @@ export default () => {
               style={[styles.phoneNumberInput, { flex: 1 }]}
               onChangeText={text => setPhoneNumber(text)}
               value={phoneNumber}
-              placeholder="2408832985"
+              placeholder="1234567890"
               keyboardType="numeric"
               onFocus={() => setShowPicker(false)}
             />
           </View>
+          <Text style={{ color: 'rgb(255, 255, 255)' }}>
+            {authNumberError}
+          </Text>
         </View>
       </View>
       <Modal
