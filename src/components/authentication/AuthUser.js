@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 
 export default ({
+  heading,
+  description,
   onAuthUserNext,
   authUserError
 }) => {
@@ -38,11 +40,10 @@ export default ({
       <View style={{ paddingTop: 100, paddingHorizontal: 25 }}>
         <View style={{ height: 125 }}>
           <Text style={[styles.header, { marginBottom: 15 }]}>
-            Create username
+            {heading}
           </Text>
           <Text style={{ color: 'rgb(255, 255, 255)' }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-          eiusmod tempor
+            {description}
           </Text>
         </View>
         <TextInput 

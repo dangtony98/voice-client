@@ -16,8 +16,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import RegisterScreen from './src/components/screens/RegisterScreen';
-import LoginScreen from './src/components/screens/LoginScreen';
 import FeedScreen from './src/components/screens/FeedScreen';
 import UploadScreen from './src/components/screens/UploadScreen';
 import UserScreen from './src/components/screens/UserScreen';
@@ -26,6 +24,7 @@ import NotificationsScreen from './src/components/screens/NotificationsScreen';
 import { getUser } from './src/service/api/users';
 
 import RegisterScreenAlt from './src/components/screens/RegisterScreenAlt';
+import LoginScreenAlt from './src/components/screens/LoginScreenAlt';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -117,6 +116,7 @@ const App: () => React$Node = () => {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
+      await AsyncStorage.removeItem('userToken');
       let userToken; 
       try {
         // case: try restore token from AsyncStorage
@@ -154,11 +154,11 @@ const App: () => React$Node = () => {
           <>
             <AuthStack.Screen 
               name="Login" 
-              component={LoginScreen} 
+              component={LoginScreenAlt} 
             />
             <AuthStack.Screen 
               name="Register" 
-              component={RegisterScreen}
+              component={RegisterScreenAlt}
             />
             <AuthStack.Screen
               name="Main"
@@ -184,11 +184,7 @@ const App: () => React$Node = () => {
           <AuthStack.Navigator 
             screenOptions={{ headerShown: false }}
           >
-            {/* {renderScreen(validToken)} */}
-            <AuthStack.Screen
-              name="Reg2"
-              component={RegisterScreenAlt}
-            />
+            {renderScreen(validToken)}
           </AuthStack.Navigator>
         </NavigationContainer>
       </Provider>

@@ -13,6 +13,8 @@ const sendOTP = (phone_number, callback1, callback2) => {
 }
 
 const verifyOTP = (phone_number, code, callback1, callback2) => {
+  console.log(`phone number: ${phone_number}`);
+  console.log(`code: ${code}`);
   axios.post(`${URL}/authentication/onboard/verify-otp/${phone_number}/${code}`)
   .then(response => {
       AsyncStorage.setItem('onboardToken', response.data.token);
@@ -44,9 +46,26 @@ const registerUsername = async (username, callback1, callback2) => {
     onboard_token: onboardToken,
     username
   })
-  .then(response => {
-    AsyncStorage.setItem('userToken', response.data.token);
-    AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+  .then(async response => {
+    await AsyncStorage.setItem('userToken', response.data.token);
+    await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+    await AsyncStorage.removeItem('onboardToken');
+    callback1();
+  })
+  .catch((error) => {
+    console.log(error.response);
+    callback2(error.response);
+  });
+}
+
+const login = async (phone_number, code, callback1, callback2) => {
+  axios.post(`${URL}/authentication/login/${phone_number}/${code}`)
+  .then(async response => {
+    console.log('login with response: ');
+    console.log(response.data);
+    console.log(response.data.user);
+    await AsyncStorage.setItem('userToken', response.data.token);
+    await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
     callback1();
   })
   .catch((error) => {
@@ -59,5 +78,6 @@ export {
   sendOTP,
   verifyOTP,
   checkUsername,
-  registerUsername
+  registerUsername,
+  login
 };

@@ -2,13 +2,10 @@ import React, { useRef, useState } from 'react';
 import { View, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import AuthNumber from '../authentication/AuthNumber';
 import AuthOTP from '../authentication/AuthOTP';
-import AuthUser from '../authentication/AuthUser';
-import AuthPicture from '../authentication/AuthPicture';
 
 import { 
   sendOTP,
-  verifyOTP,
-  registerUsername 
+  login 
 } from '../../service/api/authentication';
 
 export default ({
@@ -24,7 +21,6 @@ export default ({
   // error-handling
   const [authNumberError, setAuthNumberError] = useState('');
   const [authOTPError, setAuthOTPError] = useState('');
-  const [authUserError, setAuthUserError] = useState('');
 
   const handleScroll = (x) => {
     stepRef.current.scrollTo({x, y: 0, animated: true})
@@ -49,47 +45,34 @@ export default ({
   }
 
   const onAuthOTPNext = (code) => {
-    // check OTP
-    verifyOTP(`${dialCode}${phoneNumber}`, code,
+    login(`${dialCode}${phoneNumber}`, code,
       () => {
         // case: success
-        handleScroll(width * 2);
+        navigation.navigate('Main');
       }, error => {
         // case: fail
-        setAuthOTPError(error);
-      });
+        switch (error) {
+          case 401:
+            // case: user is not yet registered, please sign up
+            setAuthNumberError(error.data.msg);
+            handleScroll(0);
+            break;
+          case 410:
+            // case: code expired
+            setAuthOTPError(error.data.msg);
+            break;
+          case 422:
+            // case: incorrect code
+            setAuthOTPError(error.data.msg);
+            break;
+        }
+      })
   }
 
   const onAuthOTPResend = () => {
     setOTPCode('');
     handleOTP(dialCode, phoneNumber);
   }
-
-  const onAuthUserNext = (username) => {    
-    registerUsername(username,
-      () => {
-        // case: success (registered user with username)
-        navigation.navigate('Main');
-      }, error => {
-        // case: fail
-        switch (error.status) {
-          case 401:
-            // case: session has expired
-            setAuthNumberError(error.data.msg);
-            handleScroll(0);
-            break;
-          case 422:
-            // case: username is taken
-            setAuthUserError(error.data.message);
-            break;
-        }
-      });
-  }
-
-  // TO-DO:
-  // const onAuthPictureNext = () => {
-  //   // package profile picture and upload
-  // }
   
   const handleOTP = (dialCode, phoneNumber) => {
     sendOTP(`${dialCode}${phoneNumber}`, 
@@ -130,13 +113,6 @@ export default ({
           setOTPCode={setOTPCode}
           authOTPError={authOTPError}
         />
-        <AuthUser 
-          onAuthUserNext={onAuthUserNext}
-          authUserError={authUserError}
-          heading="Create username"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-        />
-        {/* <AuthPicture /> */}
       </ScrollView>
     </View>
   );

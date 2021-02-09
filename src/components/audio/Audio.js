@@ -9,7 +9,6 @@ import { setCurrentTrack, setIsPlaying } from '../../actions/audio';
 import { setCurrentFeedIndex } from '../../actions/feed';
 import { createTrack } from '../../service/audio/trackQueue';
 import { initVoteState, handleVote } from '../../service/votes/votes';
-import { cast_vote } from '../../service/api/votes';
 
 export const audio = ({ 
   item,
