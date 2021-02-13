@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Platform, Dimensions, ActionSheetIOS, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AudioRecorderPlayer, {
-  AVEncoderAudioQualityIOSType,
-  AVEncodingOption,
-  AudioEncoderAndroidType,
-  AudioSourceAndroidType,
-} from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { postAudio } from '../../service/api/posts';
+
+import UploadRecord from '../upload/UploadRecord';
 
 export default ({ navigation, setModalVisible }) => {  
   const windowWidth = Dimensions.get('window').width;
@@ -33,14 +30,6 @@ export default ({ navigation, setModalVisible }) => {
   useEffect(() => {
     setAudioRecorderPlayer(new AudioRecorderPlayer());
   }, []);
-
-  const audioSet = {
-    AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-    AudioSourceAndroid: AudioSourceAndroidType.MIC,
-    AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-    AVNumberOfChannelsKeyIOS: 2,
-    AVFormatIDKeyIOS: AVEncodingOption.aac,
-  };
 
   const onStartRecord = async () => {
     const result = await audioRecorderPlayer.startRecorder();
@@ -199,7 +188,8 @@ export default ({ navigation, setModalVisible }) => {
   };
 
   const onHandleShare = () => {
-    if (caption != '' && image != null && audioUri != null) {
+    if (caption != '' && image != null && audioUri != null && isSharing == false) {
+        setIsSharing(true);
         let formData = new FormData();
         formData.append('caption', caption);
         formData.append('audio_file', {
@@ -214,6 +204,7 @@ export default ({ navigation, setModalVisible }) => {
         });
         postAudio(formData, () => {
           onHandleReset();
+          setIsSharing(false);
           setModalVisible(false);
           navigation.navigate('Feed');
         });
@@ -224,6 +215,15 @@ export default ({ navigation, setModalVisible }) => {
     stepRef.current.scrollTo({x, y: 0, animated: true})
   };
 
+  const onUploadRecordCancel = () => {
+    setModalVisible(false);
+    navigation.navigate('Feed');
+  }
+
+  const onUploadRecordDone = () => {
+    handleScroll(windowWidth);
+  }
+
   return (
     <ScrollView 
       style={{ flex: 1 }}
@@ -232,7 +232,7 @@ export default ({ navigation, setModalVisible }) => {
       scrollEnabled={false}
       ref={stepRef}
     >
-      <View style={[styles.recordScreen, { width: windowWidth, backgroundColor: 'rgb(52, 152, 219)' }]}>
+      {/* <View style={[styles.recordScreen, { width: windowWidth, backgroundColor: 'rgb(52, 152, 219)' }]}>
         <TouchableOpacity 
           activeOpacity={0.5}
           onPress={() => onHandleCancel()}
@@ -258,8 +258,13 @@ export default ({ navigation, setModalVisible }) => {
           </TouchableOpacity>
           {renderTouchable('Done', onHandleDone, { marginLeft: 25 })}
         </View>
-      </View>
-      
+      </View> */}
+      <UploadRecord 
+        onUploadRecordCancel={onUploadRecordCancel}
+        onUploadRecordDone={onUploadRecordDone}
+        setAudioUri={setAudioUri}
+        setImage={setImage}
+      />
       <View style={[styles.editScreen, { width: windowWidth, backgroundColor: 'rgb(255, 255, 255)' }]}>
           <View style={styles.editTop}>
           <TouchableOpacity
@@ -275,7 +280,9 @@ export default ({ navigation, setModalVisible }) => {
             activeOpacity={0.5}
             onPress={() => onHandleShare()}
           >
-            <Text style={{ fontWeight: '500', color: 'rgb(52, 152, 219)'}}>Share</Text>
+            <Text style={{ fontWeight: '500', color: 'rgb(52, 152, 219)'}}>
+              Share
+            </Text>
           </TouchableOpacity>
           </View>
           <View style={styles.editAudio}>

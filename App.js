@@ -16,16 +16,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RegisterScreen from './src/components/screens/RegisterScreen';
+import LoginScreen from './src/components/screens/LoginScreen';
+import WelcomeScreen from './src/components/screens/WelcomeScreen';
 import FeedScreen from './src/components/screens/FeedScreen';
 import UploadScreen from './src/components/screens/UploadScreen';
 import UserScreen from './src/components/screens/UserScreen';
 import SplashScreen from './src/components/screens/SplashScreen';
+import ProfileScreen from './src/components/screens/ProfileScreen';
 import NotificationsScreen from './src/components/screens/NotificationsScreen';
 import { getUser } from './src/service/api/users';
-
-import RegisterScreenAlt from './src/components/screens/RegisterScreenAlt';
-import LoginScreenAlt from './src/components/screens/LoginScreenAlt';
-import WelcomeScreen from './src/components/screens/WelcomeScreen';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -51,6 +51,7 @@ const AuthStack = createStackNavigator();
 const FeedStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Insert Profile Screen onto this stack
 const FeedStackScreen = () => {
   return (
     <FeedStack.Navigator
@@ -59,6 +60,10 @@ const FeedStackScreen = () => {
       <FeedStack.Screen 
         name="Feed"
         component={FeedScreen}
+      />
+      <FeedStack.Screen 
+        name="Profile"
+        component={ProfileScreen}
       />
       <FeedStack.Screen 
         name="Notifications"
@@ -117,7 +122,6 @@ const App: () => React$Node = () => {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-      await AsyncStorage.removeItem('userToken');
       let userToken; 
       try {
         // case: try restore token from AsyncStorage
@@ -159,11 +163,11 @@ const App: () => React$Node = () => {
             />
             <AuthStack.Screen 
               name="Login" 
-              component={LoginScreenAlt} 
+              component={LoginScreen} 
             />
             <AuthStack.Screen 
               name="Register" 
-              component={RegisterScreenAlt}
+              component={RegisterScreen}
             />
             <AuthStack.Screen
               name="Main"

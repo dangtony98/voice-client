@@ -76,7 +76,6 @@ export const audio = ({
       <ImageBackground 
         source={{ uri: art_location }}
         style={[styles.audioImage, { alignItems: 'center' }]}
-        imageStyle={{ borderRadius: 10 }}
       >
         <AudioToggle 
           isPlaying={isPlaying && (currentTrack.id == item._id)}
@@ -125,7 +124,9 @@ export const audio = ({
           <Text style={{ marginLeft: 5, fontWeight: '500' }}>{comments_count}</Text>
         </TouchableOpacity>
       </View>
-      <Text>{caption}</Text>
+      <View style={{ paddingHorizontal: 25 }}>
+        <Text>{caption}</Text>
+      </View>
     </View>
   );
 }
@@ -146,8 +147,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(audio);
 const styles = StyleSheet.create({
   audio: {
     backgroundColor: 'rgb(255, 255, 255)',
-    paddingVertical: 25,
-    paddingHorizontal: 25
+    paddingVertical: 15
   },
   userImage: {
     height: 30,
@@ -158,17 +158,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 350,
-    padding: 25,
     alignSelf: 'stretch'
   },
   top: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 15
   },
   bottom: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingHorizontal: 15
   },
   bottomGroup: {
     flexDirection: 'row', 

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   View, 
   Text, 
   TouchableOpacity,
   Dimensions, 
+  Keyboard,
   StyleSheet 
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,6 +20,7 @@ export default ({
   setOTPCode,
   authOTPError
 }) => {
+
   return (
     <View style={{ 
         flex: 1,

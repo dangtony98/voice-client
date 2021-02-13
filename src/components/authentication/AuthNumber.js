@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   View, 
   Text, 
   TextInput, 
   TouchableOpacity, 
-  Keyboard,
   Dimensions,
   StyleSheet 
 } from 'react-native';
@@ -28,7 +27,6 @@ export default ({
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const onCountryCode = () => {
-    Keyboard.dismiss();
     setShowPicker(prevState => !prevState);
   }
 
@@ -93,7 +91,8 @@ export default ({
               value={phoneNumber}
               placeholder="1234567890"
               keyboardType="numeric"
-              onFocus={() => setShowPicker(false)}
+              // onFocus={() => setShowPicker(false)}
+              autoFocus={true}
             />
           </View>
           <Text style={{ color: 'rgb(255, 255, 255)' }}>
