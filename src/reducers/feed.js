@@ -17,6 +17,11 @@ const current = {
       feed: [],
       skip: 0,
       index: 0
+    },
+    profile: {
+      feed: [],
+      skip: 0,
+      index: 0
     }
   },
   currentFeed: 'trending',

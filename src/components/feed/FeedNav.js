@@ -16,6 +16,7 @@ export default ({
   currentFeed,
   setCurrentFeed
 }) => {
+
   return (
     <View style={styles.navBar}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>

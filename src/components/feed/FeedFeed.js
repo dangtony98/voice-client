@@ -9,6 +9,7 @@ import { setFeed, paginateFeed, setCurrentFeed, incCurrentFeedIndex } from '../.
 import { getFeed } from '../../service/api/posts';
 import { createTrack } from '../../service/audio/trackQueue';
 import { resetPlayer, setCurrentTrack} from '../../actions/audio';
+import { handleGetFeed } from '../../service/feed/feed'; 
 
 import Modal from 'react-native-modal';
 import CommentsModal from '../modals/CommentsModal';
@@ -17,7 +18,9 @@ import AudioBar from '../audio/AudioBar';
 
 const POST_HEIGHT = 519.5;
 
+// TO-DO: FIX AUTO-PAN
 export const feedFeed = ({
+  navigation,
   feeds,
   currentFeed,
   setFeed,
@@ -30,13 +33,7 @@ export const feedFeed = ({
   const [commentsModalVisible, setCommentsModalVisible] = useState(false);
 
   useEffect(() => {
-    getFeed(0, async (feedArray) => {
-      setFeed(currentFeed, {
-        feed: feedArray,
-        skip: feedArray.length,
-        index: 0,
-      });
-    });
+    handleGetFeed(currentFeed, 0, setFeed, () => {});
   }, [isFocused]);
 
   useEffect(() => {
@@ -71,13 +68,8 @@ export const feedFeed = ({
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    getFeed(0, async (feedArray) => {
+    handleGetFeed(currentFeed, 0, setFeed, async () => {
       setIsRefreshing(false);
-      setFeed(currentFeed, {
-        feed: feedArray,
-        skip: feed.length,
-        index: 0,
-      });
       await TrackPlayer.reset();
     });
   };
@@ -88,6 +80,7 @@ export const feedFeed = ({
         item={item}
         {...item}
         index={index}
+        navigation={navigation}
         setupCommentModal={setupCommentModal}
       />
     );

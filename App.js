@@ -100,7 +100,6 @@ const HomeTabScreen = () => {
         showLabel: false
       }}
     >
-     
       <Tab.Screen 
         name="Feed" 
         component={FeedStackScreen} 

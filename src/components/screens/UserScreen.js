@@ -1,57 +1,72 @@
-import React, { useState } from 'react';
-import { View, Image, Text, FlatList, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
-import AudioBar from '../audio/AudioBar';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import { 
+  View, 
+  Text,
+  TouchableOpacity, 
+  StyleSheet 
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { setCurrentFeed } from '../../actions/feed';
 import ProfileInfo from '../profile/ProfileInfo';
+import FeedFeed from '../feed/FeedFeed'
 
-const DATA = [
-  { id: 'a', caption: 'Lorem ipsum dolor sit adipiscing elit1' }, 
-  { id: 'bsa', caption: 'Lorem ipsum dolor sit adipiscing elit2' }, 
-  { id: 'cd', caption: 'Lorem ipsum dolor sit adipiscing elit3' }, 
-  { id: 'de', caption: 'Lorem ipsum dolor sit adipiscing elit4' }, 
-  { id: 'e', caption: 'Lorem ipsum dolor sit adipiscing elit5' },
-  { id: 'f', caption: 'Lorem ipsum dolor sit adipiscing elit6' },
-  { id: 'g', caption: 'Lorem ipsum dolor sit adipiscing elit7' },
-  { id: 'h', caption: 'Lorem ipsum dolor sit adipiscing elit8' }
-];
+export const userScreen = ({ navigation }) => {
+  const isFocused = useIsFocused();
+  
+  const [profileInfo, setProfileInfo] = useState(null);
 
-export default ({ navigation }) => {
-  const [selected, setSelected] = useState('list');
-  const [isFetching, setIsFetching] = useState(false);
-
-  const windowWidth = Dimensions.get("window").width;
-  const numColumns = 2;
-  const tileDimension = windowWidth / numColumns;
-
-  const renderItem = ({ item }) => (
-    <View style={{ 
-      height: tileDimension, 
-      width: tileDimension, 
-      padding: 1,
-    }}>
-      <View style={{ flexGrow: 1, backgroundColor: 'rgba(52, 152, 219, 0.25)', padding: 15 }}>
-
-      </View>
-    </View>
-  );
+  useEffect(() => {
+    (async () => {
+      if (isFocused) {
+        // get and set user profile from AsyncStorage
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        setProfileInfo(user);
+        setCurrentFeed('profile');
+      }
+    })();
+  }, [isFocused]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <ProfileInfo />
-      <FlatList 
-        data={DATA}
-        renderItem={renderItem}
-        numColumns={1}
-        keyExtractor={item => item.id}
-        refreshing={isFetching}
-        onRefresh={() => console.log('Refresh triggered')}
-        style={{ flexGrow: 1 }}
-      />
-      <AudioBar />
+    <View style={{ flex: 1, backgroundColor: 'rgb(255, 255, 255)' }}>
+      <View style={styles.navBar}>
+        <View />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => console.log('Unimplemented')}
+        >
+          <Icon 
+            name="menu-outline" 
+            size={25} 
+            color="rgb(127, 140, 141)" 
+          />
+        </TouchableOpacity>
+      </View>
+      {profileInfo && (
+        <>
+          <ProfileInfo 
+            profileInfo={profileInfo}
+          />
+          <FeedFeed 
+            navigation={navigation}
+          />
+        </>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  navBar: {
+    flexDirection: 'row',
+    height: 100,
+    paddingTop: 75,
+    paddingHorizontal: 25,
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
   top: {
     backgroundColor: 'rgb(255, 255, 255)',
     paddingTop: 75,
@@ -78,3 +93,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentFeed: (name) => dispatch(setCurrentFeed(name)),
+});
+
+export default connect(null, mapDispatchToProps)(userScreen);

@@ -17,6 +17,7 @@ import { createTrack } from '../../service/audio/trackQueue';
 import { initVoteState, handleVote } from '../../service/votes/votes';
 
 export const audio = ({ 
+  navigation,
   item,
   index,
   user, 
@@ -60,19 +61,26 @@ export const audio = ({
       var {x, y, width, height} = event.nativeEvent.layout;
       console.log(height);
     }}>
-      <View style={[styles.top, { marginBottom: 15 }]}>
-        <Image 
-          source={{ uri: user.img_location }}
-          style={[styles.userImage, { marginRight: 15 }]} 
-        />
-        <View style={{ 
-          flexDirection: 'column', 
-          justifyContent: 'space-between', 
-        }}>
-          <Text style={{ fontWeight: '500' }}>{user.username}</Text>
-          <Text style={{ color: 'rgb(127,140,141)' }}>{moment(createdAt).fromNow(true)}</Text>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() => navigation.navigate('Profile', {
+          id: user._id
+        })}
+      >
+        <View style={[styles.top, { marginBottom: 15 }]}>
+          <Image 
+            source={{ uri: user.img_location }}
+            style={[styles.userImage, { marginRight: 15 }]} 
+          />
+          <View style={{ 
+            flexDirection: 'column', 
+            justifyContent: 'space-between', 
+          }}>
+            <Text style={{ fontWeight: '500' }}>{user.username}</Text>
+            <Text style={{ color: 'rgb(127,140,141)' }}>{moment(createdAt).fromNow(true)}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
       <ImageBackground 
         source={{ uri: art_location }}
         style={[styles.audioImage, { alignItems: 'center' }]}

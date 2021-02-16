@@ -43,4 +43,42 @@ const getUser = async (token, callback1, callback2) => {
   });
 }
 
-export { register, login, getUser };
+const getUserWithId = async (id, callback) => {
+  const token = await AsyncStorage.getItem('userToken');
+  axios.get(`${URL}/users/user/${id}`, {
+    headers: {
+      Accept: 'application/json', 
+      Authorization: token
+    }
+  })
+  .then(response => {
+    callback(response.data);
+  })
+  .catch((error) => {
+      console.log('Error: ' + error);
+  });
+}
+
+const getUserFeedWithId = async (id, skip, callback) => {
+  const token = await AsyncStorage.getItem('userToken');
+  axios.get(`${URL}/users/user-feed/${id}?skip=${skip}`, {
+    headers: {
+      Accept: 'application/json', 
+      Authorization: token
+    }
+  })
+  .then(response => {
+      callback(response.data);
+  })
+  .catch((error) => {
+    console.log('Error: ' + error);
+  });
+}
+
+export { 
+  register, 
+  login, 
+  getUser,
+  getUserWithId,
+  getUserFeedWithId 
+};
