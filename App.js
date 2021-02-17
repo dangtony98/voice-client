@@ -26,6 +26,7 @@ import SplashScreen from './src/components/screens/SplashScreen';
 import ProfileScreen from './src/components/screens/ProfileScreen';
 import NotificationsScreen from './src/components/screens/NotificationsScreen';
 import { getUser } from './src/service/api/users';
+import { handleFCMToken } from './src/service/notifications/notifications';
 
 moment.updateLocale('en', {
   relativeTime: {

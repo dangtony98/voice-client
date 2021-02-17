@@ -32,7 +32,6 @@ export const profileScreen = (props, {
       setProfileInfo(user);
       setCurrentFeed('profile');
     })
-
   }, []);
 
   return (

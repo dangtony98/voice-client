@@ -31,8 +31,6 @@ const checkUsername = async (username, callback1, callback2) => {
     onboard_token: onboardToken
   })
   .then(response => {
-    console.log('checkUsername() with data: ');
-    console.log(response.data);
     callback1(response.data);
   })
   .catch((error) => {
@@ -53,7 +51,6 @@ const registerUsername = async (username, callback1, callback2) => {
     callback1();
   })
   .catch((error) => {
-    console.log(error.response);
     callback2(error.response);
   });
 }
@@ -61,15 +58,11 @@ const registerUsername = async (username, callback1, callback2) => {
 const login = async (phone_number, code, callback1, callback2) => {
   axios.post(`${URL}/authentication/login/${phone_number}/${code}`)
   .then(async response => {
-    console.log('login with response: ');
-    console.log(response.data);
-    console.log(response.data.user);
     await AsyncStorage.setItem('userToken', response.data.token);
     await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
     callback1();
   })
   .catch((error) => {
-    console.log(error.response);
     callback2(error.response);
   });
 }

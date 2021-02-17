@@ -1,12 +1,14 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL } from '../constants';
+import { handleFCMToken } from '../notifications/notifications';
 
 const register = async (payload, callback) => {
   axios.post(`${URL}/users/register`, payload)
-  .then(response => {
-      AsyncStorage.setItem('userToken', response.data.token);
-      AsyncStorage.setItem('user', response.data.user);
+  .then(async response => {
+      await AsyncStorage.setItem('userToken', response.data.token);
+      await AsyncStorage.setItem('user', response.data.user);
+      handleFCMToken();
       callback();
   })
   .catch((error) => {
@@ -16,9 +18,10 @@ const register = async (payload, callback) => {
 
 const login = async (payload, callback) => {
   axios.post(`${URL}/users/login`, payload)
-  .then(response => {
-      AsyncStorage.setItem('userToken', response.data.token);
-      AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+  .then(async response => {
+      await AsyncStorage.setItem('userToken', response.data.token);
+      await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+      handleFCMToken();
       callback();
   })
   .catch((error) => {
@@ -33,8 +36,8 @@ const getUser = async (token, callback1, callback2) => {
       Authorization: token
     }
   })
-  .then(response => {
-      AsyncStorage.setItem('user', JSON.stringify(response.data));
+  .then(async response => {
+      await AsyncStorage.setItem('user', JSON.stringify(response.data));
       callback1();
   })
   .catch((error) => {
