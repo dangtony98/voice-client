@@ -21,6 +21,8 @@ export const profileScreen = (props, {
   currentFeed,
   setCurrentFeed
 }) => {
+  console.log('profScreen xxx');
+  console.log(props.navigation);
   const [profileInfo, setProfileInfo] = useState(null);
   const [fetchingFeed, setFetchingFeed] = useState(true);
 
@@ -39,7 +41,7 @@ export const profileScreen = (props, {
       <View style={styles.navBar}>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.goBack()} // TO-DO: Fix .goBack() from UserScreen
+          onPress={() => props.navigation.goBack()} // TO-DO: Fix .goBack() from UserScreen
         >
           <Icon 
             name="chevron-back-outline" 

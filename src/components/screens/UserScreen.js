@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { 
   View, 
-  Text,
   TouchableOpacity, 
   StyleSheet 
 } from 'react-native';
@@ -13,7 +12,10 @@ import { setCurrentFeed } from '../../actions/feed';
 import ProfileInfo from '../profile/ProfileInfo';
 import FeedFeed from '../feed/FeedFeed'
 
-export const userScreen = ({ navigation }) => {
+export const userScreen = ({ 
+  navigation,
+  setCurrentFeed
+}) => {
   const isFocused = useIsFocused();
   
   const [profileInfo, setProfileInfo] = useState(null);
@@ -24,13 +26,14 @@ export const userScreen = ({ navigation }) => {
         // get and set user profile from AsyncStorage
         const user = JSON.parse(await AsyncStorage.getItem('user'));
         setProfileInfo(user);
-        setCurrentFeed('profile');
+        console.log('AA');
+        // setCurrentFeed('profile');
       }
     })();
   }, [isFocused]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'rgb(255, 255, 255)' }}>
+    <View style={{ flex: 1, backgroundColor: 'rgb(255, 0, 0)' }}>
       <View style={styles.navBar}>
         <View />
         <TouchableOpacity
@@ -66,31 +69,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     alignItems: 'center',
     justifyContent: 'space-between'
-  },
-  top: {
-    backgroundColor: 'rgb(255, 255, 255)',
-    paddingTop: 75,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  userImage: {
-    height: 100,
-    width: 100,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'rgb(52, 152, 219)'
-  },
-  infoBar: {
-    backgroundColor: 'rgb(255, 255, 255)',
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around'
-  },
-  infoGroup: {
-    width: 100,
-    alignItems: 'center'
   }
 });
 

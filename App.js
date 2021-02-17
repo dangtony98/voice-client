@@ -100,6 +100,7 @@ const HomeTabScreen = () => {
         inactiveTintColor: 'rgb(127,140,141)',
         showLabel: false
       }}
+      backBehavior="none"
     >
       <Tab.Screen 
         name="Feed" 
