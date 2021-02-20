@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>220671515623-rv2rtako4vcn5n1v56d9v7isaahptcqi.apps.googleusercontent.com</string>
+	<string>220671515623-lgarm655j2jmhjhv9gfafe38p86rkjf4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.220671515623-rv2rtako4vcn5n1v56d9v7isaahptcqi</string>
+	<string>com.googleusercontent.apps.220671515623-lgarm655j2jmhjhv9gfafe38p86rkjf4</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBcgp1EdK51RPihkIrZzRGTwghtu-AY28M</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>moc.ppaukoreh.36020-taerter-lufrewop</string>
+	<string>powerful-retreat-02063.herokuapp.com</string>
 	<key>PROJECT_ID</key>
 	<string>voice-app-303802</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:220671515623:ios:7700eb11a2da49a421fb42</string>
+	<string>1:220671515623:ios:276dd582e897098e21fb42</string>
 </dict>
 </plist>

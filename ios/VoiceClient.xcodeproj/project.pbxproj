@@ -15,8 +15,11 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* VoiceClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* VoiceClientTests.m */; };
+		5341072C25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5341072B25E0C4DD00FA47E6 /* GoogleService-Info.plist */; };
+		5341072D25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5341072B25E0C4DD00FA47E6 /* GoogleService-Info.plist */; };
+		5341072E25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5341072B25E0C4DD00FA47E6 /* GoogleService-Info.plist */; };
+		5341072F25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5341072B25E0C4DD00FA47E6 /* GoogleService-Info.plist */; };
 		546BCCAE336E17FD8F247BA7 /* libPods-VoiceClient-VoiceClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F16833859C99366EFD7ABF8D /* libPods-VoiceClient-VoiceClientTests.a */; };
-		54D14ACE25DD477100F8554B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54D14ACD25DD477100F8554B /* GoogleService-Info.plist */; };
 		54DDCA0725C1598800059BC2 /* RNPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9093A645D174DA783C4DFE3 /* RNPlaceholder.swift */; };
 		54DDCA0825C1598800059BC2 /* RNPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9093A645D174DA783C4DFE3 /* RNPlaceholder.swift */; };
 		54DDCA0925C1598800059BC2 /* RNPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9093A645D174DA783C4DFE3 /* RNPlaceholder.swift */; };
@@ -61,8 +64,9 @@
 		2D02E47B1E0B4A5D006451C7 /* VoiceClient-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VoiceClient-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* VoiceClient-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "VoiceClient-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E8A1E94490DF4F94D8C99B1 /* Pods-VoiceClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceClient.release.xcconfig"; path = "Target Support Files/Pods-VoiceClient/Pods-VoiceClient.release.xcconfig"; sourceTree = "<group>"; };
+		5341072625E0C41900FA47E6 /* VoiceClient.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VoiceClient.entitlements; path = VoiceClient/VoiceClient.entitlements; sourceTree = "<group>"; };
+		5341072B25E0C4DD00FA47E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		541753B225BC782A00231564 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		54D14ACD25DD477100F8554B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5A3B643583E37657EA117DCD /* Pods-VoiceClient-VoiceClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceClient-VoiceClientTests.release.xcconfig"; path = "Target Support Files/Pods-VoiceClient-VoiceClientTests/Pods-VoiceClient-VoiceClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		5AC978F476347B577614D0D6 /* libPods-VoiceClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VoiceClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VoiceClient/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -133,6 +137,8 @@
 		13B07FAE1A68108700A75B9A /* VoiceClient */ = {
 			isa = PBXGroup;
 			children = (
+				5341072625E0C41900FA47E6 /* VoiceClient.entitlements */,
+				5341072B25E0C4DD00FA47E6 /* GoogleService-Info.plist */,
 				541753B125BC777700231564 /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -184,7 +190,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				54D14ACD25DD477100F8554B /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* VoiceClient */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* VoiceClientTests */,
@@ -329,7 +334,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = LBREBNFHHK;
+						DevelopmentTeam = G2MJ74VUB7;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -369,6 +374,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5341072D25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,7 +384,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				54D14ACE25DD477100F8554B /* GoogleService-Info.plist in Resources */,
+				5341072C25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
+				5341072E25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,6 +401,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5341072F25E0C4DD00FA47E6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,8 +780,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = VoiceClient/VoiceClient.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LBREBNFHHK;
+				DEVELOPMENT_TEAM = G2MJ74VUB7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = VoiceClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -782,7 +791,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "moc.ppaukoreh.36020-taerter-lufrewop";
+				PRODUCT_BUNDLE_IDENTIFIER = "powerful-retreat-02063.herokuapp.com";
 				PRODUCT_NAME = VoiceClient;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -796,8 +805,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = VoiceClient/VoiceClient.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LBREBNFHHK;
+				DEVELOPMENT_TEAM = G2MJ74VUB7;
 				INFOPLIST_FILE = VoiceClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -805,7 +815,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "moc.ppaukoreh.36020-taerter-lufrewop";
+				PRODUCT_BUNDLE_IDENTIFIER = "powerful-retreat-02063.herokuapp.com";
 				PRODUCT_NAME = VoiceClient;
 				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
