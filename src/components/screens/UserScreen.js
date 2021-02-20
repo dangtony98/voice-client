@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { 
@@ -8,32 +7,30 @@ import {
   StyleSheet 
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { setCurrentFeed } from '../../actions/feed';
 import ProfileInfo from '../profile/ProfileInfo';
-import FeedFeed from '../feed/FeedFeed'
+import FeedProfile from '../feed/FeedProfile';
 
-export const userScreen = ({ 
-  navigation,
-  setCurrentFeed
-}) => {
+export default ({ navigation }) => {
   const isFocused = useIsFocused();
-  
   const [profileInfo, setProfileInfo] = useState(null);
 
   useEffect(() => {
+    console.log('A');
     (async () => {
+      console.log('B');
       if (isFocused) {
-        // get and set user profile from AsyncStorage
+        console.log('C');
         const user = JSON.parse(await AsyncStorage.getItem('user'));
+        console.log('UserScreen with: ');
+        console.log(user);
+        console.log(user._id);
         setProfileInfo(user);
-        console.log('AA');
-        // setCurrentFeed('profile');
       }
     })();
   }, [isFocused]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'rgb(255, 0, 0)' }}>
+    <View style={{ flex: 1 }}>
       <View style={styles.navBar}>
         <View />
         <TouchableOpacity
@@ -52,7 +49,8 @@ export const userScreen = ({
           <ProfileInfo 
             profileInfo={profileInfo}
           />
-          <FeedFeed 
+          <FeedProfile 
+            id={profileInfo._id}
             navigation={navigation}
           />
         </>
@@ -68,12 +66,7 @@ const styles = StyleSheet.create({
     paddingTop: 75,
     paddingHorizontal: 25,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: 'rgb(255, 255, 255)'
   }
 });
-
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentFeed: (name) => dispatch(setCurrentFeed(name)),
-});
-
-export default connect(null, mapDispatchToProps)(userScreen);

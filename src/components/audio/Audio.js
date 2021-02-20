@@ -132,7 +132,7 @@ export const audio = ({
           <Text style={{ marginLeft: 5, fontWeight: '500' }}>{comments_count}</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ paddingHorizontal: 25 }}>
+      <View style={{ height: 25, paddingHorizontal: 25 }}>
         <Text>{caption}</Text>
       </View>
     </View>

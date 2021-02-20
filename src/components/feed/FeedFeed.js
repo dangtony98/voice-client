@@ -5,20 +5,17 @@ import { View, FlatList } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import TrackPlayer from 'react-native-track-player';
 import Audio from '../audio/Audio';
+import Modal from 'react-native-modal';
+import CommentsModal from '../modals/CommentsModal';
+import AudioBar from '../audio/AudioBar';
 import { setFeed, paginateFeed, setCurrentFeed, incCurrentFeedIndex } from '../../actions/feed';
 import { getFeed } from '../../service/api/posts';
 import { createTrack } from '../../service/audio/trackQueue';
 import { resetPlayer, setCurrentTrack} from '../../actions/audio';
 import { handleGetFeed } from '../../service/feed/feed'; 
 
-import Modal from 'react-native-modal';
-import CommentsModal from '../modals/CommentsModal';
+const POST_HEIGHT = 511;
 
-import AudioBar from '../audio/AudioBar';
-
-const POST_HEIGHT = 519.5;
-
-// TO-DO: FIX AUTO-PAN
 export const feedFeed = ({
   navigation,
   feeds,

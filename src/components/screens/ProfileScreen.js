@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { 
   View, 
   Text, 
@@ -8,40 +7,26 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ProfileInfo from '../profile/ProfileInfo';
-import FeedFeed, { feedFeed } from '../feed/FeedFeed';
-import { setCurrentFeed, setFeed } from '../../actions/feed';
-import { 
-  getUserWithId,
-  getUserFeedWithId
-} from '../../service/api/users';
-import { handleGetFeed } from '../../service/feed/feed'; 
+import { getUserWithId } from '../../service/api/users';
 
-export const profileScreen = (props, { 
-  navigation,
-  currentFeed,
-  setCurrentFeed
-}) => {
-  console.log('profScreen xxx');
-  console.log(props.navigation);
+import FeedProfile from '../feed/FeedProfile';
+
+export default ({ route, navigation }) => {
   const [profileInfo, setProfileInfo] = useState(null);
-  const [fetchingFeed, setFetchingFeed] = useState(true);
+  const { id } = route.params;
 
   useEffect(() => {
-    const { id } = props.route.params;
-    // get and set user profile using request
-    // TO-DO: FIX
     getUserWithId(id, user => {
       setProfileInfo(user);
-      setCurrentFeed('profile');
-    })
+    });
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'rgb(255, 255, 255)' }}>
+    <View style={{ flex: 1 }}>
       <View style={styles.navBar}>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.goBack()} // TO-DO: Fix .goBack() from UserScreen
+          onPress={() => navigation.goBack()}
         >
           <Icon 
             name="chevron-back-outline" 
@@ -49,25 +34,15 @@ export const profileScreen = (props, {
             color="rgb(127, 140, 141)" 
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => console.log('Unimplemented')}
-        >
-          <Text style={{ 
-              fontWeight: '500',
-              color: 'rgb(255, 255, 255)' 
-            }}
-          >
-            Next
-          </Text>
-        </TouchableOpacity>
+        <></>
       </View>
       {profileInfo && (
         <>
           <ProfileInfo 
             profileInfo={profileInfo}
           />
-          <FeedFeed 
+          <FeedProfile 
+            id={id}
             navigation={navigation}
           />
         </>
@@ -83,16 +58,7 @@ const styles = StyleSheet.create({
     paddingTop: 75,
     paddingHorizontal: 25,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: 'rgb(255, 255, 255)'
   }
 });
-
-const mapStateToProps = ({feed}) => ({
-  currentFeed: feed.currentFeed,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentFeed: (name) => dispatch(setCurrentFeed(name)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(profileScreen);
