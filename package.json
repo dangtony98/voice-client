@@ -16,6 +16,7 @@
     "@react-native-community/slider": "^3.0.3",
     "@react-native-firebase/app": "^10.8.0",
     "@react-native-firebase/iid": "^10.8.0",
+    "@react-native-firebase/messaging": "^10.8.0",
     "@react-native-picker/picker": "^1.9.10",
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",

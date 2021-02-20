@@ -1129,6 +1129,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-firebase/iid/-/iid-10.8.0.tgz"
   "version" "10.8.0"
 
+"@react-native-firebase/messaging@^10.8.0":
+  "integrity" "sha512-93xjjUhp61wIVADONX51Gry4k4luaENrsnbYjwxoUnWcG5vxHIAwPbeXwWIfEs1/oiv7vvXScc11WjE95LLfiw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-10.8.0.tgz"
+  "version" "10.8.0"
+
 "@react-native-picker/picker@^1.9.10":
   "integrity" "sha512-g0C0RLjXXGE4UfmGxNtAOY3LE5Epz8+ck/rB1oErJowskIIG83U6LVqH9oFrx1Hq1k/lbVQGgabURlE0QQ1MHA=="
   "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-1.9.10.tgz"
