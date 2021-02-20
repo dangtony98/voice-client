@@ -786,6 +786,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = VoiceClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -810,6 +811,7 @@
 				DEVELOPMENT_TEAM = G2MJ74VUB7;
 				INFOPLIST_FILE = VoiceClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
